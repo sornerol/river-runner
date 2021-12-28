@@ -334,8 +334,8 @@ script = ExtResource( 1 )
 riverTileMap1Path = NodePath("riverTileMap1")
 riverTileMap2Path = NodePath("riverTileMap2")
 minSpeed = 100.0
-maxSpeed = 600.0
-defaultSpeed = 200.0
+maxSpeed = 250.0
+defaultSpeed = 500.0
 
 [node name="riverTileMap1" parent="River" instance=ExtResource( 2 )]
 tile_set = SubResource( 8 )

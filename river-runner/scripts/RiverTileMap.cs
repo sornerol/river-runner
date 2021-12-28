@@ -5,9 +5,10 @@ public class RiverTileMap : TileMap {
     public int mapWidth;
     public int mapHeight;
 
-    private const int MINIMUM_RIVER_WIDTH = 3;
-
+    private const int MINIMUM_RIVER_WIDTH = 2;
+    private const int LINES_WITHOUT_CHANGE = 5;
     private const int EMPTY_TILE = -1;
+   
     public override void _Ready() {
         
     }
@@ -38,9 +39,10 @@ public class RiverTileMap : TileMap {
     private RiverGeneratorState updateStateForNextRow(RiverGeneratorState state) {
         string previousLeftBankDir = state.leftBankDirection;
         string previousRightBankDir = state.rightBankDirection;
-        
-        state.leftBankDirection = attemptChangeDirection(state, "left");
-        state.rightBankDirection = attemptChangeDirection(state, "right");
+        if (state.linesGenerated > LINES_WITHOUT_CHANGE) {
+            state.leftBankDirection = attemptChangeDirection(state, "left");
+            state.rightBankDirection = attemptChangeDirection(state, "right");
+        }
 
         if (state.leftBankDirection == BankDirection.RIGHT && previousLeftBankDir != BankDirection.LEFT) {
             state.leftBankIndex++;
