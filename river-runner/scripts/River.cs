@@ -7,8 +7,6 @@ public class River : Node {
 	public NodePath riverTileMap1Path;
 	[Export]
 	public NodePath riverTileMap2Path;
-	[Export]
-	public int startingRiverWidth;
 
 	private RiverTileMap riverTileMap1;
 	private RiverTileMap riverTileMap2;
@@ -21,6 +19,8 @@ public class River : Node {
 	private RiverGeneratorState riverState = new RiverGeneratorState();
 
 	public override void _Ready() {
+		GD.Print("Seeding randomizer");
+        GD.Randomize();
 		setRiverTileMaps();
 		setTileMapDimensions();
 		initializeRiverState();
@@ -38,14 +38,21 @@ public class River : Node {
 	}
 
 	private void initializeRiverState() {
-		riverState.riverWidth = startingRiverWidth;
+		riverState.leftBankIndex = 2;
+		riverState.rightBankIndex = tileMapWidth - 3;
 		riverState.leftBankDirection = BankDirection.STRAIGHT;
 		riverState.rightBankDirection = BankDirection.STRAIGHT;
-		riverState.leftBankIndex = ((tileMapWidth - startingRiverWidth) / 2) - 1;
+		riverState.linesGenerated = 0;
 	}
 
 	private void initializeRiver() {
 		riverTileMaps.Clear();
+
+		riverTileMap1.mapHeight = tileMapHeight;
+		riverTileMap1.mapWidth = tileMapWidth;
+		riverTileMap2.mapHeight = tileMapHeight;
+		riverTileMap2.mapWidth = tileMapWidth;
+
 		riverState = riverTileMap1.generateTerrain(riverState);
 		riverTileMaps.Enqueue(riverTileMap1);
 		riverState = riverTileMap2.generateTerrain(riverState);
@@ -60,9 +67,6 @@ public class River : Node {
 		float tileSizePixels = riverTileMap1.CellSize.x * riverTileMap1.Scale.x;  //I'm assuming tiles are square
 
 		tileMapWidth = (int) viewportSize.x / (int) tileSizePixels;
-		tileMapHeight = (int) viewportSize.y / (int) tileSizePixels;
-		GD.Print("Map width = " + tileMapWidth);
-		GD.Print("Map height = " + tileMapHeight);
-		
+		tileMapHeight = (int) viewportSize.y / (int) tileSizePixels;		
 	}
 }

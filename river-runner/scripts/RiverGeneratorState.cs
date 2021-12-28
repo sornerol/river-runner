@@ -1,8 +1,7 @@
-public class RiverGeneratorState
-{
+public class RiverGeneratorState {
     public int leftBankIndex;
-    public int riverWidth;
-    public BankDirection leftBankDirection;
-    public BankDirection rightBankDirection;
-
+    public string leftBankDirection;
+    public int rightBankIndex;
+    public string rightBankDirection;
+    public int linesGenerated;
 }
