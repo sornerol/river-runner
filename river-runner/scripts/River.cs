@@ -8,6 +8,15 @@ public class River : Node {
 	[Export]
 	public NodePath riverTileMap2Path;
 
+	[Export]
+	public float minSpeed;
+
+	[Export]
+	public float maxSpeed;
+
+	[Export]
+	public float defaultSpeed;
+
 	private RiverTileMap riverTileMap1;
 	private RiverTileMap riverTileMap2;
 
@@ -27,9 +36,21 @@ public class River : Node {
 		initializeRiver();
 	}
 
-	public override void _Process(float delta)
-	{
-		
+	public override void _Process(float delta) {
+		foreach(RiverTileMap riverTileMap in riverTileMaps) {
+			Vector2 pos = riverTileMap.Position;
+			pos.y += minSpeed * delta;
+			riverTileMap.Position = pos;
+		}
+		RiverTileMap lowerTileMap = (RiverTileMap) riverTileMaps.Peek();
+		if (GetViewport().Size.y - lowerTileMap.Position.y < 0) {
+			riverTileMaps.Dequeue();
+			Vector2 pos = lowerTileMap.Position;
+			pos.y -= GetViewport().Size.y * 2;
+			lowerTileMap.Position = pos;
+			riverState = lowerTileMap.generateTerrain(riverState);
+			riverTileMaps.Enqueue(lowerTileMap);
+		}
 	}
 
 	private void setRiverTileMaps() {
@@ -57,7 +78,7 @@ public class River : Node {
 		riverTileMaps.Enqueue(riverTileMap1);
 		riverState = riverTileMap2.generateTerrain(riverState);
 		Vector2 position = riverTileMap2.Position;
-		position.y = GetViewport().Size.y;
+		position.y = -GetViewport().Size.y;
 		riverTileMap2.Position = position;
 		riverTileMaps.Enqueue(riverTileMap2);
 	}
