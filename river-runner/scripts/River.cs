@@ -12,10 +12,15 @@ public class River : Node {
 	public float minSpeed;
 
 	[Export]
+	public float defaultSpeed;
+
+	[Export]
 	public float maxSpeed;
 
 	[Export]
-	public float defaultSpeed;
+	public float speedSensitivity;
+
+	private float currentSpeed;
 
 	private RiverTileMap riverTileMap1;
 	private RiverTileMap riverTileMap2;
@@ -28,18 +33,19 @@ public class River : Node {
 	private RiverGeneratorState riverState = new RiverGeneratorState();
 
 	public override void _Ready() {
-		GD.Print("Seeding randomizer");
         GD.Randomize();
 		setRiverTileMaps();
 		setTileMapDimensions();
 		initializeRiverState();
 		initializeRiver();
+		currentSpeed = defaultSpeed / 2;
 	}
 
 	public override void _Process(float delta) {
+		adjustSpeed(delta);
 		foreach(RiverTileMap riverTileMap in riverTileMaps) {
 			Vector2 pos = riverTileMap.Position;
-			pos.y += minSpeed * delta;
+			pos.y += currentSpeed * delta;
 			riverTileMap.Position = pos;
 		}
 		RiverTileMap lowerTileMap = (RiverTileMap) riverTileMaps.Peek();
@@ -89,5 +95,43 @@ public class River : Node {
 
 		tileMapWidth = (int) viewportSize.x / (int) tileSizePixels;
 		tileMapHeight = (int) viewportSize.y / (int) tileSizePixels;		
+	}
+
+	private void adjustSpeed(float delta) {
+		if (Input.IsActionPressed("ui_up")) {
+			speedUp(delta);
+		} else if (Input.IsActionPressed("ui_down")) {
+			slowDown(delta);
+		} else {
+			returnToDefaultSpeed(delta);
+		}
+	}
+
+	private void speedUp(float delta) {
+		currentSpeed += speedSensitivity * delta;
+		if (currentSpeed > maxSpeed) {
+			currentSpeed = maxSpeed;
+		}
+	}
+
+	private void slowDown(float delta) {
+		currentSpeed -= speedSensitivity * delta;
+		if (currentSpeed < minSpeed) {
+			currentSpeed = minSpeed;
+		}
+	}
+
+	private void returnToDefaultSpeed(float delta) {
+		if (currentSpeed > defaultSpeed) {
+			currentSpeed -= speedSensitivity * delta;
+			if (currentSpeed < defaultSpeed) {
+				currentSpeed = defaultSpeed;
+			}
+		} else if (currentSpeed < defaultSpeed) {
+			currentSpeed += speedSensitivity * delta;
+			if (currentSpeed > defaultSpeed) {
+				currentSpeed = defaultSpeed;
+			}
+		}
 	}
 }
