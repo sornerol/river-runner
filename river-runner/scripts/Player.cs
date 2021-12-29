@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Player : Sprite {
+public class Player : KinematicBody2D {
 
     private const int LEFT = 0;
     private const int NEUTRAL = 1;
@@ -10,14 +10,29 @@ public class Player : Sprite {
     [Export]
     public float turnSpeed;
 
+    private Sprite playerSprite;
+
     public override void _Ready() {
+        playerSprite = GetNode<Sprite>("Player");
         initializePosition();
     }
 
     public override void _Process(float delta) {
-        checkInputAndMovePlayer(delta);
     }
 
+    public override void _PhysicsProcess(float delta) {
+        Vector2 movement = new Vector2();
+        if (Input.IsActionPressed("ui_left")) {
+            playerSprite.Frame = LEFT;
+            movement.x = -turnSpeed * delta;
+        } else if (Input.IsActionPressed("ui_right")) {
+            playerSprite.Frame = RIGHT;
+            movement.x = turnSpeed * delta;
+        } else {
+            playerSprite.Frame = NEUTRAL;
+        }
+        MoveAndCollide(movement);
+    }
     private void initializePosition() {
         Vector2 viewportSize = GetViewport().Size;
         Vector2 pos = Position;
@@ -25,20 +40,5 @@ public class Player : Sprite {
         pos.y = viewportSize.y * 0.8f;
 
         Position = pos;
-    }
-
-    private void checkInputAndMovePlayer(float delta) {
-        Vector2 pos = Position;
-        if (Input.IsActionPressed("ui_left")) {
-            Frame = LEFT;
-            pos.x -= turnSpeed * delta;
-            Position = pos;
-        } else if (Input.IsActionPressed("ui_right")) {
-            Frame = RIGHT;
-            pos.x += turnSpeed * delta;
-            Position = pos;
-        } else {
-            Frame = NEUTRAL;
-        }
     }
 }

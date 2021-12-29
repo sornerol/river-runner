@@ -346,17 +346,17 @@ tile_set = SubResource( 8 )
 [node name="riverTileMap2" parent="River" instance=ExtResource( 2 )]
 tile_set = SubResource( 9 )
 
-[node name="Player" type="Sprite" parent="."]
+[node name="Player" type="KinematicBody2D" parent="."]
 position = Vector2( 260, 650 )
 scale = Vector2( 3, 3 )
+script = ExtResource( 6 )
+turnSpeed = 75.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player"]
+polygon = PoolVector2Array( -2, -7, -1, -8, 1, -8, 2, -7, 2, -4.33333, 8, 1, 8, 4, 6, 8, -6, 8, -8, 3.66667, -8, 1, -2, -4.33333 )
+
+[node name="Player" type="Sprite" parent="Player"]
 z_index = 1
 texture = ExtResource( 5 )
 hframes = 3
 frame = 1
-script = ExtResource( 6 )
-turnSpeed = 75.0
-
-[node name="KinematicBody2D" type="KinematicBody2D" parent="Player"]
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player/KinematicBody2D"]
-polygon = PoolVector2Array( -2, -7, -1, -8, 1, -8, 2, -7, 2, -4.33333, 8, 1, 8, 4, 6, 8, -6, 8, -8, 3.66667, -8, 1, -2, -4.33333 )
