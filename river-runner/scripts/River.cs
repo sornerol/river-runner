@@ -28,6 +28,8 @@ public class River : Node {
 	private int tileMapWidth;
 	private int tileMapHeight;
 
+	private bool isMoving;
+
 	private Queue riverTileMaps = new Queue();
 
 	private RiverGeneratorState riverState = new RiverGeneratorState();
@@ -38,25 +40,28 @@ public class River : Node {
 		setTileMapDimensions();
 		initializeRiverState();
 		initializeRiver();
+		isMoving = true;
 		currentSpeed = defaultSpeed / 2;
 	}
 
-	public override void _Process(float delta) {
-		adjustSpeed(delta);
-		foreach(RiverTileMap riverTileMap in riverTileMaps) {
-			Vector2 pos = riverTileMap.Position;
-			pos.y += currentSpeed * delta;
-			riverTileMap.Position = pos;
-		}
-		RiverTileMap lowerTileMap = (RiverTileMap) riverTileMaps.Peek();
-		if (GetViewport().Size.y - lowerTileMap.Position.y < 0) {
-			riverTileMaps.Dequeue();
-			Vector2 pos = lowerTileMap.Position;
-			pos.y -= GetViewport().Size.y * 2;
-			lowerTileMap.Position = pos;
-			riverState = lowerTileMap.generateTerrain(riverState);
-			riverTileMaps.Enqueue(lowerTileMap);
-		}
+	public override void _PhysicsProcess(float delta) {
+		if(isMoving) {
+			adjustSpeed(delta);
+			foreach(RiverTileMap riverTileMap in riverTileMaps) {
+				Vector2 pos = riverTileMap.Position;
+				pos.y += currentSpeed * delta;
+				riverTileMap.Position = pos;
+			}
+			RiverTileMap lowerTileMap = (RiverTileMap) riverTileMaps.Peek();
+			if (GetViewport().Size.y - lowerTileMap.Position.y < 0) {
+				riverTileMaps.Dequeue();
+				Vector2 pos = lowerTileMap.Position;
+				pos.y -= GetViewport().Size.y * 2;
+				lowerTileMap.Position = pos;
+				riverState = lowerTileMap.generateTerrain(riverState);
+				riverTileMaps.Enqueue(lowerTileMap);
+			}
+		}		
 	}
 
 	private void setRiverTileMaps() {
@@ -133,5 +138,9 @@ public class River : Node {
 				currentSpeed = defaultSpeed;
 			}
 		}
+	}
+
+	public void onPlaneCrashed() {
+		isMoving = false;
 	}
 }

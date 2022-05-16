@@ -10,6 +10,9 @@ public class Player : KinematicBody2D {
     [Export]
     public float turnSpeed;
 
+    [Signal]
+    public delegate void planeCrashed();
+
     private Sprite playerSprite;
 
     public override void _Ready() {
@@ -31,7 +34,10 @@ public class Player : KinematicBody2D {
         } else {
             playerSprite.Frame = NEUTRAL;
         }
-        MoveAndCollide(movement);
+        KinematicCollision2D collision = MoveAndCollide(movement);
+        if (collision != null) {
+            EmitSignal(nameof(planeCrashed));
+        }
     }
     private void initializePosition() {
         Vector2 viewportSize = GetViewport().Size;

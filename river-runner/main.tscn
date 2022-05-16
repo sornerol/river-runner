@@ -360,3 +360,5 @@ z_index = 1
 texture = ExtResource( 5 )
 hframes = 3
 frame = 1
+
+[connection signal="planeCrashed" from="Player" to="River" method="onPlaneCrashed"]
