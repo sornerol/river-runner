@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/EnemyBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/sprites/tanker.png" type="Texture" id=2]
+
+[node name="Tanker" instance=ExtResource( 1 )]
+scale = Vector2( 3, 3 )
+
+[node name="CollisionPolygon2D" parent="." index="0"]
+polygon = PoolVector2Array( -7.66667, -0.666667, -2.66667, 3, 8, 3, 8, -0.666667 )
+
+[node name="Sprite" parent="." index="1"]
+texture = ExtResource( 2 )
