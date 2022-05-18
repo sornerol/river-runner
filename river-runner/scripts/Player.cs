@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public class Player : KinematicBody2D {
 
@@ -15,15 +14,21 @@ public class Player : KinematicBody2D {
 
     private Sprite playerSprite;
 
+    private bool playerIsMoving;
+
     public override void _Ready() {
         playerSprite = GetNode<Sprite>("Player");
         initializePosition();
+        playerIsMoving = true;
     }
 
     public override void _Process(float delta) {
     }
 
     public override void _PhysicsProcess(float delta) {
+        if (!playerIsMoving) {
+            return;
+        }
         Vector2 movement = new Vector2();
         if (Input.IsActionPressed("ui_left")) {
             playerSprite.Frame = LEFT;
@@ -37,6 +42,7 @@ public class Player : KinematicBody2D {
         KinematicCollision2D collision = MoveAndCollide(movement);
         if (collision != null) {
             EmitSignal(nameof(planeCrashed));
+            playerIsMoving = false;
         }
     }
     private void initializePosition() {
