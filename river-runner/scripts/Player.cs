@@ -9,6 +9,9 @@ public class Player : KinematicBody2D {
     [Export]
     public float turnSpeed;
 
+	[Export]
+	public PackedScene bullet;
+
     [Signal]
     public delegate void planeCrashed();
 
@@ -38,6 +41,12 @@ public class Player : KinematicBody2D {
             movement.x = turnSpeed * delta;
         } else {
             playerSprite.Frame = NEUTRAL;
+        }
+
+        if (Input.IsActionJustPressed("ui_accept")) {
+            Bullet newBullet = (Bullet) bullet.Instance();
+            newBullet.GlobalPosition = this.GlobalPosition;
+            GetTree().Root.AddChild(newBullet);
         }
         KinematicCollision2D collision = MoveAndCollide(movement);
         if (collision != null) {
