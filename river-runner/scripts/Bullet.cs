@@ -22,7 +22,6 @@ public class Bullet : KinematicBody2D
     }
 
     public void _OnScreenExited() {
-        GD.Print("Bullet exited screen");
         QueueFree();
     }
 }

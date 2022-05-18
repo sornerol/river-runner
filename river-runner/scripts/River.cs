@@ -20,6 +20,9 @@ public class River : Node {
 	[Export]
 	public float speedSensitivity;
 
+	[Export]
+	public PackedScene[] enemyScenes;
+
 	private float currentSpeed;
 
 	private RiverTileMap riverTileMap1;
