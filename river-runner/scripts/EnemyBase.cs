@@ -26,9 +26,9 @@ public class EnemyBase : KinematicBody2D
             {
                  Node collider = (Node) collision.Collider;
                  if (collider.IsInGroup("terrain")) {
-                    Vector2 pos = Position;
-                    pos.x *= -1;
-                    Position = pos;
+                    Vector2 scale = Scale;
+                    scale.x *= -1;
+                    Scale = scale;
                     directionFlipped = !directionFlipped;
                  }
             }
