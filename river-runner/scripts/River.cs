@@ -4,9 +4,7 @@ using System.Collections;
 public class River : Node {
 	
 	[Export]
-	public NodePath riverTileMap1Path;
-	[Export]
-	public NodePath riverTileMap2Path;
+	public PackedScene riverTileMapScene;
 
 	[Export]
 	public float minSpeed;
@@ -68,8 +66,10 @@ public class River : Node {
 	}
 
 	private void setRiverTileMaps() {
-		riverTileMap1 = (RiverTileMap) GetNode(riverTileMap1Path);
-		riverTileMap2 = (RiverTileMap) GetNode(riverTileMap2Path);		
+		riverTileMap1 = (RiverTileMap) riverTileMapScene.Instance();
+		riverTileMap2 = (RiverTileMap) riverTileMapScene.Instance();
+		AddChild(riverTileMap1);
+		AddChild(riverTileMap2);
 	}
 
 	private void initializeRiverState() {
