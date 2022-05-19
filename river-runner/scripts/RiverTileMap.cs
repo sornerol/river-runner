@@ -2,11 +2,15 @@ using Godot;
 using System.Collections;
 
 public class RiverTileMap : TileMap {
+
+	[Export]
+	public PackedScene[] enemyScenes;
+
     public int mapWidth;
     public int mapHeight;
 
     private const int MINIMUM_RIVER_WIDTH = 2;
-    private const int LINES_WITHOUT_CHANGE = 5;
+    private const int LINES_WITHOUT_CHANGE = 10;
     private const int EMPTY_TILE = -1;
    
     public override void _Ready() {
@@ -31,6 +35,7 @@ public class RiverTileMap : TileMap {
                     SetCell(x, y, EMPTY_TILE);                                        
                 }
             }
+            attemptEnemySpawn(currentState, y);
             currentState = updateStateForNextRow(currentState);
         }
         return currentState;
@@ -97,6 +102,29 @@ public class RiverTileMap : TileMap {
         return (string) possibleDirections[(int) newDirectionIndex];
     }
 
+    private void attemptEnemySpawn(RiverGeneratorState currentState, int currentRow) {
+        if (currentState.linesGenerated < LINES_WITHOUT_CHANGE) {
+            return;
+        }
+        if (GD.Randi() % 100 > 20) 
+        {
+            return;
+        }
+        uint enemyToSpawn = GD.Randi() % (uint) enemyScenes.Length;
+        EnemyBase newEnemy = (EnemyBase) enemyScenes[(int) enemyToSpawn].Instance();
+        AddChild(newEnemy);
+        Vector2 spawnPosition = new Vector2();
+        spawnPosition.y = 8 * currentRow;
+        if (newEnemy.isAquaticVehicle) {
+            int riverWidth = currentState.rightBankIndex - currentState.leftBankIndex;
+            int spawnTile = (riverWidth / 2) + currentState.leftBankIndex;
+            spawnPosition.x = (int) spawnTile * 8;
+        } else {
+            spawnPosition.x = mapWidth * 8;
+        }
+        newEnemy.Position = spawnPosition;
+    }
+    
     private RiverGeneratorState validateAndCorrectDirection(RiverGeneratorState currentState, string bank) {
         if (bank == "left") {
             if (currentState.leftBankDirection == BankDirection.LEFT && currentState.leftBankIndex <= 0) {

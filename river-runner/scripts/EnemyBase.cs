@@ -1,21 +1,50 @@
 using Godot;
-using System;
 
 public class EnemyBase : KinematicBody2D
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
+    private const int TERRAIN_MASK_BIT = 0;
+    [Export]
+    public bool isAquaticVehicle;
 
-    // Called when the node enters the scene tree for the first time.
+    [Export]
+    public float horizontalSpeed;
+
+    private bool directionFlipped;
+
     public override void _Ready()
     {
-        
+        SetCollisionMaskBit(TERRAIN_MASK_BIT, isAquaticVehicle);
     }
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+    public override void _PhysicsProcess(float delta)
+    {
+        base._PhysicsProcess(delta);
+        Vector2 movement = new Vector2(getHorizontalMovement(delta), 0);
+        KinematicCollision2D collision =  MoveAndCollide(movement);
+        if (collision != null) {
+            if(collision.Collider.IsClass("Node")) 
+            {
+                 Node collider = (Node) collision.Collider;
+                 if (collider.IsInGroup("terrain")) {
+                    Vector2 pos = Position;
+                    pos.x *= -1;
+                    Position = pos;
+                    directionFlipped = !directionFlipped;
+                 }
+            }
+        }
+    }
+
+    public void _OnScreenExited() {
+        QueueFree();
+    }
+
+    private float getHorizontalMovement(float delta)
+    {
+        float movement = horizontalSpeed * delta;
+        if (!directionFlipped) {
+            movement *= -1;
+        }
+        return movement;
+    }
 }

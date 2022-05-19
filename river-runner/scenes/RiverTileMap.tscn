@@ -1,12 +1,16 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://tilesets/river.tres" type="TileSet" id=1]
 [ext_resource path="res://scripts/RiverTileMap.cs" type="Script" id=2]
+[ext_resource path="res://scenes/enemies/Helicopter.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/enemies/Tanker.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/enemies/Jet.tscn" type="PackedScene" id=5]
 
-[node name="RiverTileMap" type="TileMap"]
-scale = Vector2( 5, 5 )
+[node name="RiverTileMap" type="TileMap" groups=["terrain"]]
+scale = Vector2( 3, 3 )
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 8, 8 )
 cell_custom_transform = Transform2D( 0, 0, 0, 0, 0, 0 )
 format = 1
 script = ExtResource( 2 )
+enemyScenes = [ ExtResource( 3 ), ExtResource( 5 ), ExtResource( 4 ) ]
