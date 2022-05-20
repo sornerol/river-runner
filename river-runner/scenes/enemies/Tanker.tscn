@@ -8,7 +8,9 @@ isAquaticVehicle = true
 horizontalSpeed = 50.0
 
 [node name="CollisionPolygon2D" parent="." index="0"]
+position = Vector2( -2, 0 )
 polygon = PoolVector2Array( -7.66667, -0.666667, -2.66667, 3, 8, 3, 8, -0.666667 )
 
 [node name="Sprite" type="Sprite" parent="." index="1"]
 texture = ExtResource( 2 )
+offset = Vector2( -2, 0 )
