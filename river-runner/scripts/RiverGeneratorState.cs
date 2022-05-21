@@ -4,4 +4,5 @@ public class RiverGeneratorState {
     public int rightBankIndex;
     public string rightBankDirection;
     public int linesGenerated;
+    public bool enemySpawnedLastLine;
 }

@@ -4,16 +4,15 @@
 [ext_resource path="res://spriteframes/tanker.tres" type="SpriteFrames" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 8, 2 )
+extents = Vector2( 8, 3 )
 
 [node name="EnemyBase" instance=ExtResource( 1 )]
 scoreValue = 20
 isAquaticVehicle = true
-minHorizontalSpeed = 5.0
-maxHorizontalSpeed = 15.0
+minHorizontalSpeed = 10.0
+maxHorizontalSpeed = 25.0
 
 [node name="CollisionShape2D" parent="." index="1"]
-position = Vector2( 0, 1 )
 shape = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." index="2"]

@@ -17,7 +17,7 @@ public class RiverTileMap : TileMap {
 
     [Export]
     public int enemySpawnRate;
-
+    
     private const int EMPTY_TILE = -1;
    
     public override void _Ready() {
@@ -110,6 +110,10 @@ public class RiverTileMap : TileMap {
     }
 
     private void attemptEnemySpawn(RiverGeneratorState currentState, int currentRow) {
+        if (currentState.enemySpawnedLastLine) {
+            currentState.enemySpawnedLastLine = false;
+            return;
+        }
         if (currentState.linesGenerated < initialLinesWithoutChange) {
             return;
         }
@@ -117,6 +121,7 @@ public class RiverTileMap : TileMap {
         {
             return;
         }
+
         uint enemyToSpawn = GD.Randi() % (uint) enemyScenes.Length;
         EnemyBase newEnemy = (EnemyBase) enemyScenes[(int) enemyToSpawn].Instance();
         AddChild(newEnemy);
@@ -133,6 +138,7 @@ public class RiverTileMap : TileMap {
             spawnPosition.x = newEnemy.directionFlipped ? 0: mapWidth * 8;
         }
         newEnemy.Position = spawnPosition;
+        currentState.enemySpawnedLastLine = true;
     }
     
     private RiverGeneratorState validateAndCorrectDirection(RiverGeneratorState currentState, string bank) {
