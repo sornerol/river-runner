@@ -7,8 +7,8 @@
 extents = Vector2( 7.5, 1.5 )
 
 [node name="EnemyBase" instance=ExtResource( 1 )]
-minHorizontalSpeed = 40.0
-maxHorizontalSpeed = 50.0
+minHorizontalSpeed = 20.0
+maxHorizontalSpeed = 40.0
 
 [node name="CollisionShape2D" parent="." index="1"]
 position = Vector2( -0.5, -1.5 )

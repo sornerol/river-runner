@@ -3,6 +3,7 @@ using Godot;
 public class EnemyBase : ShootableBase
 {
     private const int TERRAIN_MASK_BIT = 0;
+
     [Export]
     public bool isAquaticVehicle;
 
@@ -36,11 +37,14 @@ public class EnemyBase : ShootableBase
     }
 
     async public void _OnBodyEntered(PhysicsBody2D body) {
+        int pointsToAdd = scoreValue;
+
         if (body.IsInGroup("terrain")) {
             flipDirection();
             return;
         }
         if (body.IsInGroup("bullet")) {
+            pointsToAdd = 0;
             ((Bullet) body).despawn();
         }
 
@@ -52,6 +56,7 @@ public class EnemyBase : ShootableBase
         AnimatedSprite explosionAnimation = GetNode<AnimatedSprite>("AnimatedSprite");
         explosionAnimation.Animation = "explosion";
         explosionAnimation.Play();
+        EmitSignal(nameof(shootableHit), pointsToAdd);
         await ToSignal(explosionAnimation, "animation_finished");
         QueueFree();
     }

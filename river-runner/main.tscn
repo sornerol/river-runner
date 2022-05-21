@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/River.cs" type="Script" id=1]
 [ext_resource path="res://scenes/RiverTileMap.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/HUD.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/main.cs" type="Script" id=4]
 [ext_resource path="res://assets/sprites/plane.png" type="Texture" id=5]
 [ext_resource path="res://scripts/Player.cs" type="Script" id=6]
@@ -9,6 +10,9 @@
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 4 )
+
+[node name="Control" parent="." instance=ExtResource( 3 )]
+layer = 100
 
 [node name="River" type="Node" parent="."]
 script = ExtResource( 1 )

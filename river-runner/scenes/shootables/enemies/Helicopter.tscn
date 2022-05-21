@@ -7,8 +7,8 @@
 extents = Vector2( 7.5, 3.5 )
 
 [node name="EnemyBase" instance=ExtResource( 1 )]
-minHorizontalSpeed = 30.0
-maxHorizontalSpeed = 40.0
+minHorizontalSpeed = 15.0
+maxHorizontalSpeed = 25.0
 
 [node name="CollisionShape2D" parent="." index="1"]
 position = Vector2( 0.5, 1.5 )
@@ -16,5 +16,4 @@ shape = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." index="2"]
 frames = ExtResource( 2 )
-animation = "default"
 playing = true

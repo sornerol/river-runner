@@ -9,7 +9,6 @@ extents = Vector2( 1, 1.5 )
 [node name="Bullet" type="KinematicBody2D" groups=["bullet"]]
 scale = Vector2( 3, 3 )
 collision_layer = 8
-collision_mask = 0
 collision/safe_margin = 0.001
 script = ExtResource( 2 )
 defaultSpeed = 750.0
