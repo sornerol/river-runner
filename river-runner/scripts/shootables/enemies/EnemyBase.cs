@@ -21,6 +21,7 @@ public class EnemyBase : ShootableBase
 
     public override void _Ready()
     {
+        base._Ready();
         SetCollisionMaskBit(TERRAIN_MASK_BIT, isAquaticVehicle);
         horizontalSpeed = (float) GD.RandRange(minHorizontalSpeed, maxHorizontalSpeed);
         isMoving = false;
@@ -44,11 +45,11 @@ public class EnemyBase : ShootableBase
             return;
         }
         if (body.IsInGroup("bullet")) {
-            pointsToAdd = 0;
             ((Bullet) body).despawn();
         }
 
         if (body.IsInGroup("player")) {
+            pointsToAdd = 0;
             ((Player) body).crashPlane();
         }
         isMoving = false;

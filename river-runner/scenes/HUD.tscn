@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://fonts/commodore.tres" type="DynamicFont" id=1]
+[ext_resource path="res://scripts/HUD.cs" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.6, 0.6, 0, 1 )
@@ -18,7 +19,8 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color( 1, 1, 1, 1 )
 
-[node name="Control" type="CanvasLayer"]
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource( 2 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_top = 705.0
@@ -26,7 +28,7 @@ margin_right = 480.0
 margin_bottom = 768.0
 color = Color( 0.239216, 0.239216, 0.239216, 1 )
 
-[node name="Label" type="Label" parent="ColorRect"]
+[node name="Score" type="Label" parent="ColorRect"]
 margin_left = 440.0
 margin_top = 10.0
 margin_right = 472.0
@@ -38,7 +40,7 @@ text = "0"
 align = 1
 valign = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="ColorRect"]
+[node name="Fuel" type="ProgressBar" parent="ColorRect"]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 253.0

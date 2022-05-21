@@ -7,6 +7,7 @@
 extents = Vector2( 7.5, 3.5 )
 
 [node name="EnemyBase" instance=ExtResource( 1 )]
+scoreValue = 50
 minHorizontalSpeed = 15.0
 maxHorizontalSpeed = 25.0
 

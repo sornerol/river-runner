@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://scripts/shootables/Shootable.cs" type="Script" id=1]
+[ext_resource path="res://scripts/shootables/ShootableBase.cs" type="Script" id=1]
 
 [node name="ShootableBase" type="Area2D" groups=["enemies"]]
 z_index = 10

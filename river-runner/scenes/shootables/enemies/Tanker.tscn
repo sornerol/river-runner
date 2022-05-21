@@ -7,6 +7,7 @@
 extents = Vector2( 8, 2 )
 
 [node name="EnemyBase" instance=ExtResource( 1 )]
+scoreValue = 20
 isAquaticVehicle = true
 minHorizontalSpeed = 5.0
 maxHorizontalSpeed = 15.0
