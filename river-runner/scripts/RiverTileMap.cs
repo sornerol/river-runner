@@ -9,8 +9,15 @@ public class RiverTileMap : TileMap {
     public int mapWidth;
     public int mapHeight;
 
-    private const int MINIMUM_RIVER_WIDTH = 2;
-    private const int LINES_WITHOUT_CHANGE = 10;
+    [Export]
+    public int minimumRiverWidth;
+
+    [Export]
+    public int initialLinesWithoutChange;
+
+    [Export]
+    public int enemySpawnRate;
+
     private const int EMPTY_TILE = -1;
    
     public override void _Ready() {
@@ -44,7 +51,7 @@ public class RiverTileMap : TileMap {
     private RiverGeneratorState updateStateForNextRow(RiverGeneratorState state) {
         string previousLeftBankDir = state.leftBankDirection;
         string previousRightBankDir = state.rightBankDirection;
-        if (state.linesGenerated > LINES_WITHOUT_CHANGE) {
+        if (state.linesGenerated > initialLinesWithoutChange) {
             state.leftBankDirection = attemptChangeDirection(state, "left");
             state.rightBankDirection = attemptChangeDirection(state, "right");
         }
@@ -87,14 +94,14 @@ public class RiverTileMap : TileMap {
             if (currentState.leftBankIndex <= 0) {
                 possibleDirections.Remove(BankDirection.LEFT);
             }
-            if (currentState.rightBankIndex - (currentState.leftBankIndex +1) <= MINIMUM_RIVER_WIDTH +1 && currentState.rightBankDirection != BankDirection.RIGHT) {
+            if (currentState.rightBankIndex - (currentState.leftBankIndex +1) <= minimumRiverWidth +1 && currentState.rightBankDirection != BankDirection.RIGHT) {
                 possibleDirections.Remove(BankDirection.RIGHT);
             }
         } else {
             if (currentState.rightBankIndex >= mapWidth) {
                 possibleDirections.Remove(BankDirection.RIGHT);
             }
-            if (currentState.rightBankIndex - (currentState.leftBankIndex +1) <= MINIMUM_RIVER_WIDTH +1 && currentState.leftBankDirection != BankDirection.LEFT) {
+            if (currentState.rightBankIndex - (currentState.leftBankIndex +1) <= minimumRiverWidth +1 && currentState.leftBankDirection != BankDirection.LEFT) {
                 possibleDirections.Remove(BankDirection.LEFT);
             }
         }
@@ -103,10 +110,10 @@ public class RiverTileMap : TileMap {
     }
 
     private void attemptEnemySpawn(RiverGeneratorState currentState, int currentRow) {
-        if (currentState.linesGenerated < LINES_WITHOUT_CHANGE) {
+        if (currentState.linesGenerated < initialLinesWithoutChange) {
             return;
         }
-        if (GD.Randi() % 100 > 20) 
+        if (GD.Randi() % 100 > enemySpawnRate) 
         {
             return;
         }
@@ -115,12 +122,15 @@ public class RiverTileMap : TileMap {
         AddChild(newEnemy);
         Vector2 spawnPosition = new Vector2();
         spawnPosition.y = 8 * currentRow;
+        if (GD.Randi() % 100 < 50) {
+            newEnemy.flipDirection();
+        }
         if (newEnemy.isAquaticVehicle) {
             int riverWidth = currentState.rightBankIndex - currentState.leftBankIndex;
             int spawnTile = (riverWidth / 2) + currentState.leftBankIndex;
             spawnPosition.x = (int) spawnTile * 8;
         } else {
-            spawnPosition.x = mapWidth * 8;
+            spawnPosition.x = newEnemy.directionFlipped ? 0: mapWidth * 8;
         }
         newEnemy.Position = spawnPosition;
     }
@@ -131,7 +141,7 @@ public class RiverTileMap : TileMap {
                 currentState.leftBankDirection = BankDirection.STRAIGHT;
             }
             if (currentState.leftBankDirection == BankDirection.RIGHT 
-                    && currentState.rightBankIndex - (currentState.leftBankIndex +1) <= MINIMUM_RIVER_WIDTH +1 
+                    && currentState.rightBankIndex - (currentState.leftBankIndex +1) <= minimumRiverWidth +1 
                     && currentState.rightBankDirection != BankDirection.RIGHT) {
                 currentState.leftBankDirection = BankDirection.STRAIGHT;
                 currentState.leftBankIndex--;
@@ -141,7 +151,7 @@ public class RiverTileMap : TileMap {
                 currentState.rightBankDirection = BankDirection.STRAIGHT;
             }
             if (currentState.rightBankDirection == BankDirection.LEFT 
-                    && currentState.rightBankIndex - (currentState.leftBankIndex +1) <= MINIMUM_RIVER_WIDTH +1 
+                    && currentState.rightBankIndex - (currentState.leftBankIndex +1) <= minimumRiverWidth +1 
                     && currentState.leftBankDirection != BankDirection.LEFT) {
                 currentState.rightBankDirection = BankDirection.STRAIGHT;
                 currentState.rightBankIndex++;

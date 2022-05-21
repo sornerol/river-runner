@@ -17,11 +17,16 @@ public class Bullet : KinematicBody2D
         KinematicCollision2D collision = MoveAndCollide(movement);
 
         if (collision != null) {
-            QueueFree();
+            despawn();
         }
     }
 
     public void _OnScreenExited() {
+        despawn();
+    }
+
+    public void despawn() 
+    {
         QueueFree();
     }
 }

@@ -50,10 +50,15 @@ public class Player : KinematicBody2D {
         }
         KinematicCollision2D collision = MoveAndCollide(movement);
         if (collision != null) {
-            EmitSignal(nameof(planeCrashed));
-            playerIsMoving = false;
+            crashPlane();
         }
     }
+
+    public void crashPlane() {
+        EmitSignal(nameof(planeCrashed));
+        playerIsMoving = false;
+    }
+
     private void initializePosition() {
         Vector2 viewportSize = GetViewport().Size;
         Vector2 pos = Position;

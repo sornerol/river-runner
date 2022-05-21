@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/shootables/enemies/EnemyBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://spriteframes/helicopter.tres" type="SpriteFrames" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 7.5, 3.5 )
+
+[node name="EnemyBase" instance=ExtResource( 1 )]
+minHorizontalSpeed = 30.0
+maxHorizontalSpeed = 40.0
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2( 0.5, 1.5 )
+shape = SubResource( 1 )
+
+[node name="AnimatedSprite" parent="." index="2"]
+frames = ExtResource( 2 )
+animation = "default"
+playing = true
