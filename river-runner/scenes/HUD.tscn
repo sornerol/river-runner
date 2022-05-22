@@ -23,17 +23,16 @@ border_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 2 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
-margin_top = 705.0
+margin_top = 660.0
 margin_right = 480.0
 margin_bottom = 768.0
 color = Color( 0.239216, 0.239216, 0.239216, 1 )
 
 [node name="Score" type="Label" parent="ColorRect"]
-margin_left = 440.0
-margin_top = 10.0
-margin_right = 472.0
-margin_bottom = 51.0
-grow_horizontal = 0
+margin_left = 175.0
+margin_top = 66.0
+margin_right = 207.0
+margin_bottom = 107.0
 grow_vertical = 0
 custom_fonts/font = ExtResource( 1 )
 text = "0"
@@ -41,12 +40,28 @@ align = 1
 valign = 1
 
 [node name="Fuel" type="ProgressBar" parent="ColorRect"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 253.0
-margin_bottom = 53.0
+margin_left = 145.0
+margin_top = 5.0
+margin_right = 472.0
+margin_bottom = 48.0
 custom_fonts/font = ExtResource( 1 )
 custom_styles/fg = SubResource( 1 )
 custom_styles/bg = SubResource( 2 )
 step = 1.0
-value = 50.0
+value = 80.0
+
+[node name="Label" type="Label" parent="ColorRect"]
+margin_left = 5.0
+margin_top = 7.0
+margin_right = 145.0
+margin_bottom = 43.0
+custom_fonts/font = ExtResource( 1 )
+text = "Fuel:"
+
+[node name="Label2" type="Label" parent="ColorRect"]
+margin_left = 5.0
+margin_top = 67.0
+margin_right = 173.0
+margin_bottom = 103.0
+custom_fonts/font = ExtResource( 1 )
+text = "Score:"

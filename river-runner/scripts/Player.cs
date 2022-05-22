@@ -12,16 +12,32 @@ public class Player : KinematicBody2D {
 	[Export]
 	public PackedScene bullet;
 
+    [Export]
+    public float fuelIncreaseRate;
+
+    [Export]
+    public float fuelBurnRateBase;
+
+    [Export]
+    public float maxFuelCapacity;
+
     [Signal]
     public delegate void planeCrashed();
 
+    [Signal]
+    public delegate void fuelLevelChanged(float newFuelLevel);
     private Sprite playerSprite;
 
+    private float fuelLevel;
+
     private bool playerIsMoving;
+
+    private bool playerIsFueling;
 
     public override void _Ready() {
         playerSprite = GetNode<Sprite>("Player");
         initializePosition();
+        fuelLevel = maxFuelCapacity * 0.8f;
         playerIsMoving = true;
     }
 
@@ -52,11 +68,34 @@ public class Player : KinematicBody2D {
         if (collision != null) {
             crashPlane();
         }
+        adjustFuelLevel(delta);
     }
 
+    public void adjustFuelLevel(float delta) {
+        if (playerIsFueling) {
+            fuelLevel += fuelIncreaseRate * delta;
+        } else {
+            fuelLevel -= fuelBurnRateBase * delta;
+        }
+        fuelLevel = Mathf.Clamp(fuelLevel, 0, maxFuelCapacity);
+        int fuelLevelPercentage = (int) (fuelLevel/maxFuelCapacity * 100);
+        EmitSignal(nameof(fuelLevelChanged), fuelLevelPercentage);
+        if (fuelLevel <= 0) {
+            GD.Print("Fuel level is zero");
+            crashPlane();
+        }
+    }
     public void crashPlane() {
         EmitSignal(nameof(planeCrashed));
         playerIsMoving = false;
+    }
+
+    public void startFueling() {
+        playerIsFueling = true;
+    }
+
+    public void stopFueling() {
+        playerIsFueling = false;
     }
 
     private void initializePosition() {

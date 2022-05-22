@@ -37,7 +37,7 @@ public class EnemyBase : ShootableBase
         Position += movement * delta;
     }
 
-    async public void _OnBodyEntered(PhysicsBody2D body) {
+    public void _OnBodyEntered(PhysicsBody2D body) {
         int pointsToAdd = scoreValue;
 
         if (body.IsInGroup("terrain")) {
@@ -53,13 +53,7 @@ public class EnemyBase : ShootableBase
             ((Player) body).crashPlane();
         }
         isMoving = false;
-        GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
-        AnimatedSprite explosionAnimation = GetNode<AnimatedSprite>("AnimatedSprite");
-        explosionAnimation.Animation = "explosion";
-        explosionAnimation.Play();
-        EmitSignal(nameof(shootableHit), pointsToAdd);
-        await ToSignal(explosionAnimation, "animation_finished");
-        QueueFree();
+        destroy(pointsToAdd);
     }
 
     public void flipDirection()

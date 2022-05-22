@@ -6,6 +6,9 @@ public class RiverTileMap : TileMap {
 	[Export]
 	public PackedScene[] enemyScenes;
 
+    [Export]
+    public PackedScene fuelDepotScene;
+
     public int mapWidth;
     public int mapHeight;
 
@@ -17,6 +20,12 @@ public class RiverTileMap : TileMap {
 
     [Export]
     public int enemySpawnRate;
+
+    [Export]
+    public int fuelDepotSpawnRate;
+
+    [Export]
+    public int fuelDepotSpawnCooldown;
     
     private const int EMPTY_TILE = -1;
    
@@ -42,7 +51,10 @@ public class RiverTileMap : TileMap {
                     SetCell(x, y, EMPTY_TILE);                                        
                 }
             }
-            attemptEnemySpawn(currentState, y);
+            bool enemySpawned = attemptEnemySpawn(currentState, y);
+            if (!enemySpawned) {
+                attemptFuelDepotSpawn (currentState, y);
+            }
             currentState = updateStateForNextRow(currentState);
         }
         return currentState;
@@ -109,17 +121,17 @@ public class RiverTileMap : TileMap {
         return (string) possibleDirections[(int) newDirectionIndex];
     }
 
-    private void attemptEnemySpawn(RiverGeneratorState currentState, int currentRow) {
+    private bool attemptEnemySpawn(RiverGeneratorState currentState, int currentRow) {
         if (currentState.enemySpawnedLastLine) {
             currentState.enemySpawnedLastLine = false;
-            return;
+            return false;
         }
         if (currentState.linesGenerated < initialLinesWithoutChange) {
-            return;
+            return false;
         }
         if (GD.Randi() % 100 > enemySpawnRate) 
         {
-            return;
+            return false;
         }
 
         uint enemyToSpawn = GD.Randi() % (uint) enemyScenes.Length;
@@ -139,8 +151,34 @@ public class RiverTileMap : TileMap {
         }
         newEnemy.Position = spawnPosition;
         currentState.enemySpawnedLastLine = true;
+        return true;
     }
     
+    private void attemptFuelDepotSpawn(RiverGeneratorState currentState, int currentRow) {
+        if (currentState.fuelDepotSpawnCooldown > 0) {
+            currentState.fuelDepotSpawnCooldown--;
+            return;
+        }
+        if (currentState.linesGenerated < initialLinesWithoutChange) {
+            return;
+        }
+        if (GD.Randi() % 100 > fuelDepotSpawnRate) 
+        {
+            return;
+        }
+
+        FuelDepot newFuelDepot = (FuelDepot) fuelDepotScene.Instance();
+        AddChild(newFuelDepot);
+
+        Vector2 spawnPosition = new Vector2();
+        spawnPosition.y = currentRow * 8;
+
+        int spawnTile = (int) GD.RandRange((double) currentState.leftBankIndex + 2, (double) currentState.rightBankIndex - 2 );
+        spawnPosition.x = (int) spawnTile * 8;
+        newFuelDepot.Position = spawnPosition;
+        currentState.fuelDepotSpawnCooldown = fuelDepotSpawnCooldown;
+    }
+
     private RiverGeneratorState validateAndCorrectDirection(RiverGeneratorState currentState, string bank) {
         if (bank == "left") {
             if (currentState.leftBankDirection == BankDirection.LEFT && currentState.leftBankIndex <= 0) {

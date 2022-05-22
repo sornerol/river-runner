@@ -5,4 +5,5 @@ public class RiverGeneratorState {
     public string rightBankDirection;
     public int linesGenerated;
     public bool enemySpawnedLastLine;
+    public int fuelDepotSpawnCooldown;
 }

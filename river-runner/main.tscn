@@ -31,14 +31,18 @@ collision/safe_margin = 0.001
 script = ExtResource( 6 )
 turnSpeed = 75.0
 bullet = ExtResource( 7 )
+fuelIncreaseRate = 12.5
+fuelBurnRateBase = 2.5
+maxFuelCapacity = 100.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player"]
 polygon = PoolVector2Array( -2, -7, -1, -8, 1, -8, 2, -7, 2, -4.33333, 8, 1, 8, 4, 6, 8, -6, 8, -8, 3.66667, -8, 1, -2, -4.33333 )
 
 [node name="Player" type="Sprite" parent="Player"]
-z_index = 1
+z_index = 100
 texture = ExtResource( 5 )
 hframes = 3
 frame = 1
 
+[connection signal="fuelLevelChanged" from="Player" to="HUD" method="updateFuelLevel"]
 [connection signal="planeCrashed" from="Player" to="River" method="onPlaneCrashed"]

@@ -43,22 +43,23 @@ public class River : Node {
 	}
 
 	public override void _PhysicsProcess(float delta) {
-		if(isMoving) {
-			adjustSpeed(delta);
-			foreach(RiverTileMap riverTileMap in riverTileMaps) {
-				Vector2 pos = riverTileMap.Position;
-				pos.y += currentSpeed * delta;
-				riverTileMap.Position = pos;
-			}
-			RiverTileMap lowerTileMap = (RiverTileMap) riverTileMaps.Peek();
-			if (GetViewport().Size.y - lowerTileMap.Position.y < 0) {
-				riverTileMaps.Dequeue();
-				Vector2 pos = lowerTileMap.Position;
-				pos.y -= GetViewport().Size.y * 2;
-				lowerTileMap.Position = pos;
-				riverState = lowerTileMap.generateTerrain(riverState);
-				riverTileMaps.Enqueue(lowerTileMap);
-			}
+		if(!isMoving) {
+			return;
+		}
+		adjustSpeed(delta);
+		foreach(RiverTileMap riverTileMap in riverTileMaps) {
+			Vector2 pos = riverTileMap.Position;
+			pos.y += currentSpeed * delta;
+			riverTileMap.Position = pos;
+		}
+		RiverTileMap lowerTileMap = (RiverTileMap) riverTileMaps.Peek();
+		if (GetViewport().Size.y - lowerTileMap.Position.y < 0) {
+			riverTileMaps.Dequeue();
+			Vector2 pos = lowerTileMap.Position;
+			pos.y -= GetViewport().Size.y * 2;
+			lowerTileMap.Position = pos;
+			riverState = lowerTileMap.generateTerrain(riverState);
+			riverTileMaps.Enqueue(lowerTileMap);
 		}		
 	}
 
