@@ -1,10 +1,11 @@
 using Godot;
 using System.Collections;
 
-public class RiverTileMap : TileMap {
+public class RiverTileMap : TileMap
+{
 
-	[Export]
-	public PackedScene[] enemyScenes;
+    [Export]
+    public PackedScene[] enemyScenes;
 
     [Export]
     public PackedScene fuelDepotScene;
@@ -26,65 +27,86 @@ public class RiverTileMap : TileMap {
 
     [Export]
     public int fuelDepotSpawnCooldown;
-    
+
     private const int EMPTY_TILE = -1;
-   
-    public override void _Ready() {
-        
+
+    public override void _Ready()
+    {
+
     }
 
-    public override void _Process(float delta) {
-        
+    public override void _Process(float delta)
+    {
+
     }
 
-    public RiverGeneratorState generateTerrain(RiverGeneratorState currentState) {
-        
-        for(int y = mapHeight - 1; y >=0; y--) {
-            for(int x = 0; x < mapWidth; x++) {
-                if (x < currentState.leftBankIndex || x > currentState.rightBankIndex) {
+    public RiverGeneratorState generateTerrain(RiverGeneratorState currentState)
+    {
+
+        for (int y = mapHeight - 1; y >= 0; y--)
+        {
+            for (int x = 0; x < mapWidth; x++)
+            {
+                if (x < currentState.leftBankIndex || x > currentState.rightBankIndex)
+                {
                     SetCell(x, y, TileSet.FindTileByName("grass"));
-                } else if (x == currentState.leftBankIndex) {                    
+                }
+                else if (x == currentState.leftBankIndex)
+                {
                     SetCell(x, y, TileSet.FindTileByName(currentState.leftBankDirection + "_left"));
-                } else if (x == currentState.rightBankIndex) {
-                    SetCell(x, y, TileSet.FindTileByName(currentState.rightBankDirection + "_right"));                    
-                } else {
-                    SetCell(x, y, EMPTY_TILE);                                        
+                }
+                else if (x == currentState.rightBankIndex)
+                {
+                    SetCell(x, y, TileSet.FindTileByName(currentState.rightBankDirection + "_right"));
+                }
+                else
+                {
+                    SetCell(x, y, EMPTY_TILE);
                 }
             }
             bool enemySpawned = attemptEnemySpawn(currentState, y);
-            if (!enemySpawned) {
-                attemptFuelDepotSpawn (currentState, y);
+            if (!enemySpawned)
+            {
+                attemptFuelDepotSpawn(currentState, y);
             }
             currentState = updateStateForNextRow(currentState);
         }
         return currentState;
     }
 
-    private RiverGeneratorState updateStateForNextRow(RiverGeneratorState state) {
+    private RiverGeneratorState updateStateForNextRow(RiverGeneratorState state)
+    {
         string previousLeftBankDir = state.leftBankDirection;
         string previousRightBankDir = state.rightBankDirection;
-        if (state.linesGenerated > initialLinesWithoutChange) {
+        if (state.linesGenerated > initialLinesWithoutChange)
+        {
             state.leftBankDirection = attemptChangeDirection(state, "left");
             state.rightBankDirection = attemptChangeDirection(state, "right");
         }
 
-        if (state.leftBankDirection == BankDirection.RIGHT && previousLeftBankDir != BankDirection.LEFT) {
+        if (state.leftBankDirection == BankDirection.RIGHT && previousLeftBankDir != BankDirection.LEFT)
+        {
             state.leftBankIndex++;
-        }   
-        if (state.leftBankDirection == BankDirection.LEFT  && previousLeftBankDir == BankDirection.LEFT) {
+        }
+        if (state.leftBankDirection == BankDirection.LEFT && previousLeftBankDir == BankDirection.LEFT)
+        {
             state.leftBankIndex--;
         }
-        if (state.leftBankDirection == BankDirection.STRAIGHT && previousLeftBankDir == BankDirection.LEFT) {
+        if (state.leftBankDirection == BankDirection.STRAIGHT && previousLeftBankDir == BankDirection.LEFT)
+        {
             state.leftBankIndex--;
-        }        
+        }
 
-        if (state.rightBankDirection == BankDirection.RIGHT && previousRightBankDir == BankDirection.RIGHT) {
+        if (state.rightBankDirection == BankDirection.RIGHT && previousRightBankDir == BankDirection.RIGHT)
+        {
             state.rightBankIndex++;
-        }      
-        if (state.rightBankDirection == BankDirection.LEFT && previousRightBankDir != BankDirection.RIGHT) {
+        }
+        if (state.rightBankDirection == BankDirection.LEFT && previousRightBankDir != BankDirection.RIGHT)
+        {
             state.rightBankIndex--;
         }
-        if(state.rightBankDirection == BankDirection.STRAIGHT && previousRightBankDir == BankDirection.RIGHT) {
+        if (state.rightBankDirection == BankDirection.STRAIGHT && previousRightBankDir == BankDirection.RIGHT)
+        {
             state.rightBankIndex++;
         }
 
@@ -95,118 +117,146 @@ public class RiverTileMap : TileMap {
         return state;
     }
 
-    private string attemptChangeDirection(RiverGeneratorState currentState, string bank) {
+    private string attemptChangeDirection(RiverGeneratorState currentState, string bank)
+    {
         ArrayList possibleDirections = new ArrayList();
 
         possibleDirections.Add(BankDirection.STRAIGHT);
         possibleDirections.Add(BankDirection.LEFT);
         possibleDirections.Add(BankDirection.RIGHT);
 
-        if (bank == "left") {
-            if (currentState.leftBankIndex <= 0) {
+        if (bank == "left")
+        {
+            if (currentState.leftBankIndex <= 0)
+            {
                 possibleDirections.Remove(BankDirection.LEFT);
             }
-            if (currentState.rightBankIndex - (currentState.leftBankIndex +1) <= minimumRiverWidth +1 && currentState.rightBankDirection != BankDirection.RIGHT) {
+            if (currentState.rightBankIndex - (currentState.leftBankIndex + 1) <= minimumRiverWidth + 1 && currentState.rightBankDirection != BankDirection.RIGHT)
+            {
                 possibleDirections.Remove(BankDirection.RIGHT);
             }
-        } else {
-            if (currentState.rightBankIndex >= mapWidth) {
+        }
+        else
+        {
+            if (currentState.rightBankIndex >= mapWidth)
+            {
                 possibleDirections.Remove(BankDirection.RIGHT);
             }
-            if (currentState.rightBankIndex - (currentState.leftBankIndex +1) <= minimumRiverWidth +1 && currentState.leftBankDirection != BankDirection.LEFT) {
+            if (currentState.rightBankIndex - (currentState.leftBankIndex + 1) <= minimumRiverWidth + 1 && currentState.leftBankDirection != BankDirection.LEFT)
+            {
                 possibleDirections.Remove(BankDirection.LEFT);
             }
         }
-        uint newDirectionIndex = GD.Randi() % (uint) possibleDirections.Count;
-        return (string) possibleDirections[(int) newDirectionIndex];
+        uint newDirectionIndex = GD.Randi() % (uint)possibleDirections.Count;
+        return (string)possibleDirections[(int)newDirectionIndex];
     }
 
-    private bool attemptEnemySpawn(RiverGeneratorState currentState, int currentRow) {
-        if (currentState.enemySpawnedLastLine) {
+    private bool attemptEnemySpawn(RiverGeneratorState currentState, int currentRow)
+    {
+        if (currentState.enemySpawnedLastLine)
+        {
             currentState.enemySpawnedLastLine = false;
             return false;
         }
-        if (currentState.linesGenerated < initialLinesWithoutChange) {
+        if (currentState.linesGenerated < initialLinesWithoutChange)
+        {
             return false;
         }
-        if (GD.Randi() % 100 > enemySpawnRate) 
+        if (GD.Randi() % 100 > enemySpawnRate)
         {
             return false;
         }
 
-        uint enemyToSpawn = GD.Randi() % (uint) enemyScenes.Length;
-        EnemyBase newEnemy = (EnemyBase) enemyScenes[(int) enemyToSpawn].Instance();
+        uint enemyToSpawn = GD.Randi() % (uint)enemyScenes.Length;
+        EnemyBase newEnemy = (EnemyBase)enemyScenes[(int)enemyToSpawn].Instance();
         AddChild(newEnemy);
         Vector2 spawnPosition = new Vector2();
         spawnPosition.y = 8 * currentRow;
-        if (GD.Randi() % 100 < 50) {
+        if (GD.Randi() % 100 < 50)
+        {
             newEnemy.flipDirection();
         }
-        if (newEnemy.isAquaticVehicle) {
+        if (newEnemy.isAquaticVehicle)
+        {
             int riverWidth = currentState.rightBankIndex - currentState.leftBankIndex;
             int spawnTile = (riverWidth / 2) + currentState.leftBankIndex;
-            spawnPosition.x = (int) spawnTile * 8;
-        } else {
-            spawnPosition.x = newEnemy.directionFlipped ? 0: mapWidth * 8;
+            spawnPosition.x = (int)spawnTile * 8;
+        }
+        else
+        {
+            spawnPosition.x = newEnemy.directionFlipped ? 0 : mapWidth * 8;
         }
         newEnemy.Position = spawnPosition;
         currentState.enemySpawnedLastLine = true;
         return true;
     }
-    
-    private void attemptFuelDepotSpawn(RiverGeneratorState currentState, int currentRow) {
-        if (currentState.fuelDepotSpawnCooldown > 0) {
+
+    private void attemptFuelDepotSpawn(RiverGeneratorState currentState, int currentRow)
+    {
+        if (currentState.fuelDepotSpawnCooldown > 0)
+        {
             currentState.fuelDepotSpawnCooldown--;
             return;
         }
-        if (currentState.linesGenerated < initialLinesWithoutChange) {
+        if (currentState.linesGenerated < initialLinesWithoutChange)
+        {
             return;
         }
-        if (GD.Randi() % 100 > fuelDepotSpawnRate) 
+        if (GD.Randi() % 100 > fuelDepotSpawnRate)
         {
             return;
         }
 
-        FuelDepot newFuelDepot = (FuelDepot) fuelDepotScene.Instance();
+        FuelDepot newFuelDepot = (FuelDepot)fuelDepotScene.Instance();
         AddChild(newFuelDepot);
 
         Vector2 spawnPosition = new Vector2();
         spawnPosition.y = currentRow * 8;
 
-        int spawnTile = (int) GD.RandRange((double) currentState.leftBankIndex + 2, (double) currentState.rightBankIndex - 2 );
-        spawnPosition.x = (int) spawnTile * 8;
+        int spawnTile = (int)GD.RandRange((double)currentState.leftBankIndex + 2, (double)currentState.rightBankIndex - 2);
+        spawnPosition.x = (int)spawnTile * 8;
         newFuelDepot.Position = spawnPosition;
         currentState.fuelDepotSpawnCooldown = fuelDepotSpawnCooldown;
     }
 
-    private RiverGeneratorState validateAndCorrectDirection(RiverGeneratorState currentState, string bank) {
-        if (bank == "left") {
-            if (currentState.leftBankDirection == BankDirection.LEFT && currentState.leftBankIndex <= 0) {
+    private RiverGeneratorState validateAndCorrectDirection(RiverGeneratorState currentState, string bank)
+    {
+        if (bank == "left")
+        {
+            if (currentState.leftBankDirection == BankDirection.LEFT && currentState.leftBankIndex <= 0)
+            {
                 currentState.leftBankDirection = BankDirection.STRAIGHT;
             }
-            if (currentState.leftBankDirection == BankDirection.RIGHT 
-                    && currentState.rightBankIndex - (currentState.leftBankIndex +1) <= minimumRiverWidth +1 
-                    && currentState.rightBankDirection != BankDirection.RIGHT) {
+            if (currentState.leftBankDirection == BankDirection.RIGHT
+                    && currentState.rightBankIndex - (currentState.leftBankIndex + 1) <= minimumRiverWidth + 1
+                    && currentState.rightBankDirection != BankDirection.RIGHT)
+            {
                 currentState.leftBankDirection = BankDirection.STRAIGHT;
                 currentState.leftBankIndex--;
             }
-        } else {
-            if (currentState.rightBankDirection == BankDirection.RIGHT && currentState.rightBankIndex >= mapWidth - 1) {
+        }
+        else
+        {
+            if (currentState.rightBankDirection == BankDirection.RIGHT && currentState.rightBankIndex >= mapWidth - 1)
+            {
                 currentState.rightBankDirection = BankDirection.STRAIGHT;
             }
-            if (currentState.rightBankDirection == BankDirection.LEFT 
-                    && currentState.rightBankIndex - (currentState.leftBankIndex +1) <= minimumRiverWidth +1 
-                    && currentState.leftBankDirection != BankDirection.LEFT) {
+            if (currentState.rightBankDirection == BankDirection.LEFT
+                    && currentState.rightBankIndex - (currentState.leftBankIndex + 1) <= minimumRiverWidth + 1
+                    && currentState.leftBankDirection != BankDirection.LEFT)
+            {
                 currentState.rightBankDirection = BankDirection.STRAIGHT;
                 currentState.rightBankIndex++;
             }
         }
-        if (currentState.leftBankIndex < 0) {
+        if (currentState.leftBankIndex < 0)
+        {
             GD.Print("Left bank index less than zero (this should not happen) Resetting to zero");
             currentState.leftBankIndex = 0;
             currentState.leftBankDirection = BankDirection.STRAIGHT;
         }
-        if (currentState.rightBankIndex >= mapWidth) {
+        if (currentState.rightBankIndex >= mapWidth)
+        {
             GD.Print("Right bank index greater than or equal to map width (this should not happen) Resetting to mapWidth - 1");
             currentState.rightBankIndex = mapWidth - 1;
             currentState.rightBankDirection = BankDirection.STRAIGHT;

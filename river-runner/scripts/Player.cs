@@ -1,6 +1,7 @@
 using Godot;
 
-public class Player : KinematicBody2D {
+public class Player : KinematicBody2D
+{
 
     private const int LEFT = 0;
     private const int NEUTRAL = 1;
@@ -9,8 +10,8 @@ public class Player : KinematicBody2D {
     [Export]
     public float turnSpeed;
 
-	[Export]
-	public PackedScene bullet;
+    [Export]
+    public PackedScene bullet;
 
     [Export]
     public float fuelIncreaseRate;
@@ -26,7 +27,7 @@ public class Player : KinematicBody2D {
 
     [Signal]
     public delegate void fuelLevelChanged(float newFuelLevel);
-   
+
     private AnimatedSprite playerSprite;
 
     private float fuelLevel;
@@ -35,51 +36,63 @@ public class Player : KinematicBody2D {
 
     private bool playerIsFueling;
 
-    public override void _Ready() {
+    public override void _Ready()
+    {
         playerSprite = GetNode<AnimatedSprite>("Player");
         initializePosition();
     }
 
-    public override void _Process(float delta) {
-    }
-
-    public override void _PhysicsProcess(float delta) {
-        if (!playerIsMoving) {
+    public override void _PhysicsProcess(float delta)
+    {
+        if (!playerIsMoving)
+        {
             return;
         }
         Vector2 movement = new Vector2();
-        if (Input.IsActionPressed("ui_left")) {
+        if (Input.IsActionPressed("ui_left"))
+        {
             playerSprite.Frame = LEFT;
             movement.x = -turnSpeed * delta;
-        } else if (Input.IsActionPressed("ui_right")) {
+        }
+        else if (Input.IsActionPressed("ui_right"))
+        {
             playerSprite.Frame = RIGHT;
             movement.x = turnSpeed * delta;
-        } else {
+        }
+        else
+        {
             playerSprite.Frame = NEUTRAL;
         }
 
-        if (Input.IsActionJustPressed("ui_accept")) {
-            Bullet newBullet = (Bullet) bullet.Instance();
+        if (Input.IsActionJustPressed("ui_accept"))
+        {
+            Bullet newBullet = (Bullet)bullet.Instance();
             newBullet.GlobalPosition = this.GlobalPosition;
             GetTree().Root.AddChild(newBullet);
         }
         KinematicCollision2D collision = MoveAndCollide(movement);
-        if (collision != null) {
+        if (collision != null)
+        {
             crashPlane();
         }
         adjustFuelLevel(delta);
     }
 
-    public void adjustFuelLevel(float delta) {
-        if (playerIsFueling) {
+    public void adjustFuelLevel(float delta)
+    {
+        if (playerIsFueling)
+        {
             fuelLevel += fuelIncreaseRate * delta;
-        } else {
+        }
+        else
+        {
             fuelLevel -= fuelBurnRateBase * delta;
         }
         fuelLevel = Mathf.Clamp(fuelLevel, 0, maxFuelCapacity);
-        int fuelLevelPercentage = (int) (fuelLevel/maxFuelCapacity * 100);
+        int fuelLevelPercentage = (int)(fuelLevel / maxFuelCapacity * 100);
         EmitSignal(nameof(fuelLevelChanged), fuelLevelPercentage);
-        if (fuelLevel <= 0) {
+        if (fuelLevel <= 0)
+        {
             GD.Print("Fuel level is zero");
             crashPlane();
         }
@@ -92,23 +105,27 @@ public class Player : KinematicBody2D {
         playerIsMoving = true;
         playerIsFueling = false;
     }
-    
-    public void crashPlane() {
+
+    public void crashPlane()
+    {
         EmitSignal(nameof(planeCrashed));
         playerSprite.Animation = "explosion";
         playerSprite.Play();
         playerIsMoving = false;
     }
 
-    public void startFueling() {
+    public void startFueling()
+    {
         playerIsFueling = true;
     }
 
-    public void stopFueling() {
+    public void stopFueling()
+    {
         playerIsFueling = false;
     }
 
-    private void initializePosition() {
+    private void initializePosition()
+    {
         Vector2 viewportSize = GetViewport().Size;
         Vector2 pos = Position;
         pos.x = viewportSize.x / 2;

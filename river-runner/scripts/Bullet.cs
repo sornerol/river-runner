@@ -7,7 +7,7 @@ public class Bullet : KinematicBody2D
 
     public override void _Ready()
     {
-        
+
     }
 
     public override void _PhysicsProcess(float delta)
@@ -16,16 +16,18 @@ public class Bullet : KinematicBody2D
         Vector2 movement = new Vector2(0, -defaultSpeed * delta);
         KinematicCollision2D collision = MoveAndCollide(movement);
 
-        if (collision != null) {
+        if (collision != null)
+        {
             despawn();
         }
     }
 
-    public void _OnScreenExited() {
+    public void _OnScreenExited()
+    {
         despawn();
     }
 
-    public void despawn() 
+    public void despawn()
     {
         QueueFree();
     }

@@ -1,5 +1,6 @@
 using Godot;
-public class ShootableBase : Area2D {
+public class ShootableBase : Area2D
+{
 
     [Signal]
     public delegate void shootableHit();
@@ -14,7 +15,8 @@ public class ShootableBase : Area2D {
 
     }
 
-    public async void destroy(int scoreValue) {
+    public async void destroy(int scoreValue)
+    {
         GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
         AnimatedSprite explosionAnimation = GetNode<AnimatedSprite>("AnimatedSprite");
         explosionAnimation.Animation = "explosion";

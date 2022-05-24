@@ -23,13 +23,14 @@ public class EnemyBase : ShootableBase
     {
         base._Ready();
         SetCollisionMaskBit(TERRAIN_MASK_BIT, isAquaticVehicle);
-        horizontalSpeed = (float) GD.RandRange(minHorizontalSpeed, maxHorizontalSpeed);
+        horizontalSpeed = (float)GD.RandRange(minHorizontalSpeed, maxHorizontalSpeed);
         isMoving = false;
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        if (!isMoving) {
+        if (!isMoving)
+        {
             return;
         }
         base._PhysicsProcess(delta);
@@ -37,20 +38,24 @@ public class EnemyBase : ShootableBase
         Position += movement * delta;
     }
 
-    public void _OnBodyEntered(PhysicsBody2D body) {
+    public void _OnBodyEntered(PhysicsBody2D body)
+    {
         int pointsToAdd = scoreValue;
 
-        if (body.IsInGroup("terrain")) {
+        if (body.IsInGroup("terrain"))
+        {
             flipDirection();
             return;
         }
-        if (body.IsInGroup("bullet")) {
-            ((Bullet) body).despawn();
+        if (body.IsInGroup("bullet"))
+        {
+            ((Bullet)body).despawn();
         }
 
-        if (body.IsInGroup("player")) {
+        if (body.IsInGroup("player"))
+        {
             pointsToAdd = 0;
-            ((Player) body).crashPlane();
+            ((Player)body).crashPlane();
         }
         isMoving = false;
         destroy(pointsToAdd);

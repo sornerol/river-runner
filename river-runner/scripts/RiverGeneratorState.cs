@@ -1,4 +1,5 @@
-public class RiverGeneratorState {
+public class RiverGeneratorState
+{
     public int leftBankIndex;
     public string leftBankDirection;
     public int rightBankIndex;

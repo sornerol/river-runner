@@ -15,6 +15,8 @@ public class main : Node2D
 
     private int lastFreeLifeEarnedScore;
 
+    private bool awaitingPlayerStart;
+
     private River river;
 
     private Timer getReadyTimer;
@@ -30,6 +32,21 @@ public class main : Node2D
         getReadyTimer = GetNode<Timer>("GetReadyTimer");
         player = GetNode<Player>("Player");
         initializeNewGame();
+    }
+
+    public override void _Process(float delta)
+    {
+        base._Process(delta);
+        if (!awaitingPlayerStart)
+        {
+            return;
+        }
+
+        if (Input.IsActionJustPressed("ui_accept"))
+        {
+            awaitingPlayerStart = false;
+            startGetReadyInterval();
+        }
     }
 
     public void initializeNewGame()

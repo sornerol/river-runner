@@ -13,26 +13,32 @@ public class FuelDepot : ShootableBase
         base._Ready();
     }
 
-    public void _OnScreenEntered() {}
+    public void _OnScreenEntered() { }
 
-    public void _OnScreenExited() {
+    public void _OnScreenExited()
+    {
         QueueFree();
     }
-    public void _OnBodyEntered(PhysicsBody2D body) {
-        if (body.IsInGroup("player")) {
-            ((Player) body).startFueling();
+    public void _OnBodyEntered(PhysicsBody2D body)
+    {
+        if (body.IsInGroup("player"))
+        {
+            ((Player)body).startFueling();
             return;
         }
 
-        if (body.IsInGroup("bullet")) {
-            ((Bullet) body).despawn();
+        if (body.IsInGroup("bullet"))
+        {
+            ((Bullet)body).despawn();
             destroy(scoreValue);
-        }        
+        }
     }
 
-    public void _OnBodyExited(PhysicsBody2D body) {
-        if (body.IsInGroup("player")) {
-            ((Player) body).stopFueling();
+    public void _OnBodyExited(PhysicsBody2D body)
+    {
+        if (body.IsInGroup("player"))
+        {
+            ((Player)body).stopFueling();
         }
     }
 }
