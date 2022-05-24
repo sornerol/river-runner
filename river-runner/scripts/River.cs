@@ -38,7 +38,6 @@ public class River : Node {
 		setTileMapDimensions();
 		initializeRiverState();
 		initializeRiver();
-		startMoving();
 	}
 
 	public override void _PhysicsProcess(float delta) {

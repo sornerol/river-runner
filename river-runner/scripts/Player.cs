@@ -38,7 +38,6 @@ public class Player : KinematicBody2D {
     public override void _Ready() {
         playerSprite = GetNode<AnimatedSprite>("Player");
         initializePosition();
-        startTurn();
     }
 
     public override void _Process(float delta) {

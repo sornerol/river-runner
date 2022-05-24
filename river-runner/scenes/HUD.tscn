@@ -5,7 +5,7 @@
 [ext_resource path="res://assets/sprites/plane.png" type="Texture" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.6, 0.6, 0, 1 )
+bg_color = Color( 0.666667, 1, 0, 1 )
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -22,6 +22,15 @@ border_color = Color( 1, 1, 1, 1 )
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 2 )
+
+[node name="Message" type="Label" parent="."]
+margin_top = 315.0
+margin_right = 480.0
+margin_bottom = 343.0
+custom_fonts/font = ExtResource( 1 )
+text = "Ready!"
+align = 1
+valign = 1
 
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_top = 660.0
@@ -81,3 +90,12 @@ scale = Vector2( 1.5, 1.5 )
 texture = ExtResource( 3 )
 hframes = 3
 frame = 1
+
+[node name="Button" type="Button" parent="."]
+visible = false
+margin_left = 178.0
+margin_top = 347.0
+margin_right = 298.0
+margin_bottom = 407.0
+custom_fonts/font = ExtResource( 1 )
+text = "Play"

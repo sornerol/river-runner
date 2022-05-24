@@ -11,7 +11,7 @@
 [node name="Main" type="Node2D"]
 script = ExtResource( 4 )
 initialLives = 3
-freeLifeScoreInterval = 1000
+freeLifeScoreInterval = 20000
 
 [node name="HUD" parent="." instance=ExtResource( 3 )]
 layer = 100
@@ -45,5 +45,10 @@ z_index = 100
 frames = ExtResource( 5 )
 frame = 1
 
+[node name="GetReadyTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
 [connection signal="fuelLevelChanged" from="Player" to="HUD" method="updateFuelLevel"]
 [connection signal="planeCrashed" from="Player" to="." method="_OnPlaneCrashed"]
+[connection signal="timeout" from="GetReadyTimer" to="." method="_OnGetReadyTimeout"]
