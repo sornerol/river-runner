@@ -5,6 +5,9 @@ public class HUD : CanvasLayer
 {
     
     private Label scoreLabel;
+
+    private Label livesLabel;
+
     private ProgressBar fuelGauge;
 
     // Called when the node enters the scene tree for the first time.
@@ -12,10 +15,15 @@ public class HUD : CanvasLayer
     {
         scoreLabel = GetNode<Label>("ColorRect/Score");
         fuelGauge = GetNode<ProgressBar>("ColorRect/Fuel");
+        livesLabel = GetNode<Label>("ColorRect/Lives");
     }
 
     public void updateScore(int newScore) {
         scoreLabel.Text = newScore.ToString();
+    }
+
+    public void updateLives(int newLivesCount) {
+        livesLabel.Text = "x" + newLivesCount.ToString();
     }
 
     public void updateFuelLevel (int newFuelLevel) {

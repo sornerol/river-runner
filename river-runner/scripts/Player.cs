@@ -26,7 +26,8 @@ public class Player : KinematicBody2D {
 
     [Signal]
     public delegate void fuelLevelChanged(float newFuelLevel);
-    private Sprite playerSprite;
+   
+    private AnimatedSprite playerSprite;
 
     private float fuelLevel;
 
@@ -35,10 +36,9 @@ public class Player : KinematicBody2D {
     private bool playerIsFueling;
 
     public override void _Ready() {
-        playerSprite = GetNode<Sprite>("Player");
+        playerSprite = GetNode<AnimatedSprite>("Player");
         initializePosition();
-        fuelLevel = maxFuelCapacity * 0.8f;
-        playerIsMoving = true;
+        startTurn();
     }
 
     public override void _Process(float delta) {
@@ -85,8 +85,19 @@ public class Player : KinematicBody2D {
             crashPlane();
         }
     }
+
+    public void startTurn()
+    {
+        playerSprite.Animation = "default";
+        fuelLevel = maxFuelCapacity * 0.8f;
+        playerIsMoving = true;
+        playerIsFueling = false;
+    }
+    
     public void crashPlane() {
         EmitSignal(nameof(planeCrashed));
+        playerSprite.Animation = "explosion";
+        playerSprite.Play();
         playerIsMoving = false;
     }
 

@@ -4,12 +4,14 @@
 [ext_resource path="res://scenes/RiverTileMap.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/HUD.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/main.cs" type="Script" id=4]
-[ext_resource path="res://assets/sprites/plane.png" type="Texture" id=5]
+[ext_resource path="res://spriteframes/player.tres" type="SpriteFrames" id=5]
 [ext_resource path="res://scripts/Player.cs" type="Script" id=6]
 [ext_resource path="res://scenes/Bullet.tscn" type="PackedScene" id=7]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 4 )
+initialLives = 3
+freeLifeScoreInterval = 1000
 
 [node name="HUD" parent="." instance=ExtResource( 3 )]
 layer = 100
@@ -38,11 +40,10 @@ maxFuelCapacity = 100.0
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player"]
 polygon = PoolVector2Array( -2, -7, -1, -8, 1, -8, 2, -7, 2, -4.33333, 8, 1, 8, 4, 6, 8, -6, 8, -8, 3.66667, -8, 1, -2, -4.33333 )
 
-[node name="Player" type="Sprite" parent="Player"]
+[node name="Player" type="AnimatedSprite" parent="Player"]
 z_index = 100
-texture = ExtResource( 5 )
-hframes = 3
+frames = ExtResource( 5 )
 frame = 1
 
 [connection signal="fuelLevelChanged" from="Player" to="HUD" method="updateFuelLevel"]
-[connection signal="planeCrashed" from="Player" to="River" method="onPlaneCrashed"]
+[connection signal="planeCrashed" from="Player" to="." method="_OnPlaneCrashed"]

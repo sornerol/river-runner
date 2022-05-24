@@ -38,8 +38,7 @@ public class River : Node {
 		setTileMapDimensions();
 		initializeRiverState();
 		initializeRiver();
-		isMoving = true;
-		currentSpeed = defaultSpeed / 2;
+		startMoving();
 	}
 
 	public override void _PhysicsProcess(float delta) {
@@ -141,7 +140,12 @@ public class River : Node {
 		}
 	}
 
-	public void onPlaneCrashed() {
+	public void stopMoving() {
 		isMoving = false;
+	}
+
+	public void startMoving() {
+		isMoving = true;
+		currentSpeed = defaultSpeed / 2;
 	}
 }
