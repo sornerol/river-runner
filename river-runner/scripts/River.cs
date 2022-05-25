@@ -35,7 +35,6 @@ public class River : Node
 
     public override void _Ready()
     {
-        GD.Randomize();
         setRiverTileMaps();
         setTileMapDimensions();
         initializeRiverState();

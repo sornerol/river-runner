@@ -27,6 +27,7 @@ public class main : Node2D
 
     public override void _Ready()
     {
+        GD.Randomize();
         hud = GetNode<HUD>("HUD");
         river = GetNode<River>("River");
         getReadyTimer = GetNode<Timer>("GetReadyTimer");
