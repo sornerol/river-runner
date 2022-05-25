@@ -130,19 +130,13 @@ public class River : Node
     private void speedUp(float delta)
     {
         currentSpeed += speedSensitivity * delta;
-        if (currentSpeed > maxSpeed)
-        {
-            currentSpeed = maxSpeed;
-        }
+		currentSpeed = Mathf.Clamp(currentSpeed, minSpeed, maxSpeed);
     }
 
     private void slowDown(float delta)
     {
         currentSpeed -= speedSensitivity * delta;
-        if (currentSpeed < minSpeed)
-        {
-            currentSpeed = minSpeed;
-        }
+		currentSpeed = Mathf.Clamp(currentSpeed, minSpeed, maxSpeed);
     }
 
     private void returnToDefaultSpeed(float delta)
@@ -150,18 +144,12 @@ public class River : Node
         if (currentSpeed > defaultSpeed)
         {
             currentSpeed -= speedSensitivity * delta;
-            if (currentSpeed < defaultSpeed)
-            {
-                currentSpeed = defaultSpeed;
-            }
+			currentSpeed = Mathf.Clamp(currentSpeed, defaultSpeed, maxSpeed);
         }
         else if (currentSpeed < defaultSpeed)
         {
             currentSpeed += speedSensitivity * delta;
-            if (currentSpeed > defaultSpeed)
-            {
-                currentSpeed = defaultSpeed;
-            }
+			currentSpeed = Mathf.Clamp(currentSpeed, minSpeed, defaultSpeed);
         }
     }
 
