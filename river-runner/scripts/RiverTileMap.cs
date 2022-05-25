@@ -78,7 +78,7 @@ public class RiverTileMap : TileMap
     {
         string previousLeftBankDir = state.leftBankDirection;
         string previousRightBankDir = state.rightBankDirection;
-        if (state.linesGenerated > initialLinesWithoutChange)
+        if (state.linesGeneratedThisTurn > initialLinesWithoutChange)
         {
             state.leftBankDirection = attemptChangeDirection(state, "left");
             state.rightBankDirection = attemptChangeDirection(state, "right");
@@ -113,7 +113,8 @@ public class RiverTileMap : TileMap
         state = validateAndCorrectDirection(state, "left");
         state = validateAndCorrectDirection(state, "right");
 
-        state.linesGenerated++;
+        state.linesGeneratedThisTurn++;
+        state.linesGeneratedTotal++;
         return state;
     }
 
@@ -158,7 +159,7 @@ public class RiverTileMap : TileMap
             currentState.enemySpawnedLastLine = false;
             return false;
         }
-        if (currentState.linesGenerated < initialLinesWithoutChange)
+        if (currentState.linesGeneratedThisTurn < initialLinesWithoutChange)
         {
             return false;
         }
@@ -198,7 +199,7 @@ public class RiverTileMap : TileMap
             currentState.fuelDepotSpawnCooldown--;
             return;
         }
-        if (currentState.linesGenerated < initialLinesWithoutChange)
+        if (currentState.linesGeneratedThisTurn < initialLinesWithoutChange)
         {
             return;
         }

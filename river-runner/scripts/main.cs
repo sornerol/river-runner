@@ -17,9 +17,13 @@ public class main : Node2D
 
     private bool awaitingPlayerStart;
 
+    private bool attractMode;
+
     private River river;
 
     private Timer getReadyTimer;
+
+    private Timer attractModeTimer;
 
     private Player player;
 
@@ -31,8 +35,9 @@ public class main : Node2D
         hud = GetNode<HUD>("HUD");
         river = GetNode<River>("River");
         getReadyTimer = GetNode<Timer>("GetReadyTimer");
+        attractModeTimer = GetNode<Timer>("StartAttractModeTimer");
         player = GetNode<Player>("Player");
-        initializeNewGame();
+        startAttractMode();
     }
 
     public override void _Process(float delta)
@@ -45,15 +50,43 @@ public class main : Node2D
 
         if (Input.IsActionJustPressed("ui_accept"))
         {
-            awaitingPlayerStart = false;
-            startGetReadyInterval();
+            if (attractMode)
+            {
+                initializeNewGame();
+            }
+            else
+            {
+                initializeNewTurn();
+            }
+            
         }
     }
 
+    public void startAttractMode() {
+        hud.showMessage("RIVER RUNNER\nPress <space> to start");
+        attractMode = true;
+        awaitingPlayerStart = true;
+        player.Visible = false;
+        river.startMoving();
+    }
+    
     public void initializeNewGame()
     {
+        attractMode = false;
+        player.Visible = true;
+        river.stopMoving();
+        river.setupForNewGame();
         resetScore();
         resetLives();
+        initializeNewTurn();
+    }
+
+    public void initializeNewTurn() 
+    {
+        awaitingPlayerStart = false;
+        GetTree().CallGroup("enemies", "queue_free");
+        river.setupForNewTurn();
+        player.initializePlayerForNewTurn();
         startGetReadyInterval();
     }
 
@@ -83,6 +116,11 @@ public class main : Node2D
         player.startTurn();
     }
 
+    public void _onAttractModeTimeout()
+    {
+        startAttractMode();
+    }
+
     public void _OnShootableHit(int pointsToAdd)
     {
         score += pointsToAdd;
@@ -100,7 +138,16 @@ public class main : Node2D
         livesRemaining--;
         hud.updateLives(livesRemaining);
         river.stopMoving();
-        //TODO: If livesRemaining < 0, game over
+        if (livesRemaining < 1)
+        {
+            hud.showMessage("Game over");
+            attractModeTimer.Start();
+        }
+        else
+        {
+            hud.showMessage("CRASH!\nPress fire button...");
+            awaitingPlayerStart = true;
+        }
 
     }
 }

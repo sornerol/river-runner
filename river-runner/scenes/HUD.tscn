@@ -45,8 +45,7 @@ margin_right = 288.0
 margin_bottom = 103.0
 grow_vertical = 0
 custom_fonts/font = ExtResource( 1 )
-text = "0000000"
-align = 1
+text = "0"
 valign = 1
 
 [node name="Fuel" type="ProgressBar" parent="ColorRect"]
@@ -82,7 +81,7 @@ margin_top = 75.0
 margin_right = 472.0
 margin_bottom = 103.0
 custom_fonts/font = ExtResource( 1 )
-text = "X100"
+text = "X0"
 
 [node name="Plane" type="Sprite" parent="ColorRect"]
 position = Vector2( 372, 90 )

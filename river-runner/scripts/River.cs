@@ -37,8 +37,7 @@ public class River : Node
     {
         setRiverTileMaps();
         setTileMapDimensions();
-        initializeRiverState();
-        initializeRiver();
+        setupForNewGame();
     }
 
     public override void _PhysicsProcess(float delta)
@@ -74,28 +73,43 @@ public class River : Node
         AddChild(riverTileMap2);
     }
 
-    private void initializeRiverState()
+	public void setupForNewGame()
+	{
+		setRiverStateForNewGame();
+		initializeRiver();
+	}
+
+	public void setupForNewTurn()
+	{
+		setRiverStateForNewTurn();
+		initializeRiver();
+	}
+
+    private void setRiverStateForNewGame()
     {
+        riverState.linesGeneratedTotal = 0;
+		setRiverStateForNewTurn();
+    }
+
+	private void setRiverStateForNewTurn()
+	{
+		riverState.linesGeneratedThisTurn = 0;
         riverState.leftBankIndex = 2;
         riverState.rightBankIndex = tileMapWidth - 3;
         riverState.leftBankDirection = BankDirection.STRAIGHT;
         riverState.rightBankDirection = BankDirection.STRAIGHT;
-        riverState.linesGenerated = 0;
-    }
-
+	}
     private void initializeRiver()
     {
-        riverTileMaps.Clear();
-
-        riverTileMap1.mapHeight = tileMapHeight;
-        riverTileMap1.mapWidth = tileMapWidth;
-        riverTileMap2.mapHeight = tileMapHeight;
-        riverTileMap2.mapWidth = tileMapWidth;
-
+        riverTileMaps.Clear();        
+		Vector2 position;
         riverState = riverTileMap1.generateTerrain(riverState);
         riverTileMaps.Enqueue(riverTileMap1);
+		position = riverTileMap1.Position;
+		position.y = 0;
+		riverTileMap1.Position = position;
         riverState = riverTileMap2.generateTerrain(riverState);
-        Vector2 position = riverTileMap2.Position;
+        position = riverTileMap2.Position;
         position.y = -GetViewport().Size.y;
         riverTileMap2.Position = position;
         riverTileMaps.Enqueue(riverTileMap2);
@@ -108,6 +122,11 @@ public class River : Node
 
         tileMapWidth = (int)viewportSize.x / (int)tileSizePixels;
         tileMapHeight = (int)viewportSize.y / (int)tileSizePixels;
+
+		riverTileMap1.mapHeight = tileMapHeight;
+        riverTileMap1.mapWidth = tileMapWidth;
+        riverTileMap2.mapHeight = tileMapHeight;
+        riverTileMap2.mapWidth = tileMapWidth;
     }
 
     private void adjustSpeed(float delta)

@@ -39,7 +39,8 @@ public class Player : KinematicBody2D
     public override void _Ready()
     {
         playerSprite = GetNode<AnimatedSprite>("Player");
-        initializePosition();
+        GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred("disabled", true);
+        initializePlayerForNewTurn();
     }
 
     public override void _PhysicsProcess(float delta)
@@ -100,10 +101,8 @@ public class Player : KinematicBody2D
 
     public void startTurn()
     {
-        playerSprite.Animation = "default";
-        fuelLevel = maxFuelCapacity * 0.8f;
         playerIsMoving = true;
-        playerIsFueling = false;
+        GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred("disabled", false);
     }
 
     public void crashPlane()
@@ -112,6 +111,8 @@ public class Player : KinematicBody2D
         playerSprite.Animation = "explosion";
         playerSprite.Play();
         playerIsMoving = false;
+        playerIsFueling = false;
+        GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred("disabled", true);
     }
 
     public void startFueling()
@@ -124,13 +125,18 @@ public class Player : KinematicBody2D
         playerIsFueling = false;
     }
 
-    private void initializePosition()
+    public void initializePlayerForNewTurn()
     {
         Vector2 viewportSize = GetViewport().Size;
         Vector2 pos = Position;
         pos.x = viewportSize.x / 2;
         pos.y = viewportSize.y * 0.8f;
-
         Position = pos;
+
+        playerSprite.Animation = "default";
+
+        fuelLevel = maxFuelCapacity * 0.8f;
+        int fuelLevelPercentage = (int)(fuelLevel / maxFuelCapacity * 100);
+        EmitSignal(nameof(fuelLevelChanged), fuelLevelPercentage);
     }
 }
