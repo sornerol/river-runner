@@ -23,7 +23,7 @@ public class main : Node2D
 
     private Timer getReadyTimer;
 
-    private Timer attractModeTimer;
+    private Timer pauseAfterCrashTimer;
 
     private Player player;
 
@@ -35,7 +35,7 @@ public class main : Node2D
         hud = GetNode<HUD>("HUD");
         river = GetNode<River>("River");
         getReadyTimer = GetNode<Timer>("GetReadyTimer");
-        attractModeTimer = GetNode<Timer>("StartAttractModeTimer");
+        pauseAfterCrashTimer = GetNode<Timer>("PauseAfterCrashTimer");
         player = GetNode<Player>("Player");
         startAttractMode();
     }
@@ -116,9 +116,17 @@ public class main : Node2D
         player.startTurn();
     }
 
-    public void _onAttractModeTimeout()
+    public void _OnPauseTimeout()
     {
-        startAttractMode();
+        if (livesRemaining < 1)
+        {
+            startAttractMode();
+        }
+        else
+        {
+            hud.showMessage("Crash!\nPress <Space>...");
+            awaitingPlayerStart = true;
+        }
     }
 
     public void _OnShootableHit(int pointsToAdd)
@@ -137,17 +145,15 @@ public class main : Node2D
     {
         livesRemaining--;
         hud.updateLives(livesRemaining);
-        river.stopMoving();
         if (livesRemaining < 1)
         {
             hud.showMessage("Game over");
-            attractModeTimer.Start();
         }
         else
         {
-            hud.showMessage("CRASH!\nPress fire button...");
-            awaitingPlayerStart = true;
+            hud.showMessage("Crash!");
         }
-
+        river.stopMoving();
+        pauseAfterCrashTimer.Start();
     }
 }
