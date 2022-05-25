@@ -7,7 +7,7 @@
 extents = Vector2( 7.5, 3.5 )
 
 [node name="EnemyBase" instance=ExtResource( 1 )]
-scoreValue = 50
+scoreValue = 100
 minHorizontalSpeed = 15.0
 maxHorizontalSpeed = 25.0
 
@@ -17,4 +17,5 @@ shape = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." index="2"]
 frames = ExtResource( 2 )
+frame = 1
 playing = true

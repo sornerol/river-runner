@@ -9,7 +9,7 @@ extents = Vector2( 7, 7 )
 
 [node name="ShootableBase" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
-scoreValue = 500
+scoreValue = 250
 
 [node name="CollisionShape2D" parent="." index="1"]
 shape = SubResource( 1 )
