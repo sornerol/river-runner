@@ -172,7 +172,7 @@ public class RiverTileMap : TileMap
         EnemyBase newEnemy = (EnemyBase)enemyScenes[(int)enemyToSpawn].Instance();
         AddChild(newEnemy);
         Vector2 spawnPosition = new Vector2();
-        spawnPosition.y = 8 * currentRow;
+        spawnPosition.y = (8 * currentRow) + 4;
         if (GD.Randi() % 100 < 50)
         {
             newEnemy.flipDirection();
@@ -212,7 +212,7 @@ public class RiverTileMap : TileMap
         AddChild(newFuelDepot);
 
         Vector2 spawnPosition = new Vector2();
-        spawnPosition.y = currentRow * 8;
+        spawnPosition.y = (currentRow * 8) + 4;
 
         int spawnTile = (int)GD.RandRange((double)currentState.leftBankIndex + 2, (double)currentState.rightBankIndex - 2);
         spawnPosition.x = (int)spawnTile * 8;

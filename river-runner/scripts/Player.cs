@@ -68,7 +68,9 @@ public class Player : KinematicBody2D
         if (Input.IsActionJustPressed("ui_accept"))
         {
             Bullet newBullet = (Bullet)bullet.Instance();
-            newBullet.GlobalPosition = this.GlobalPosition;
+            Vector2 bulletSpawnLocation = this.GlobalPosition;
+            bulletSpawnLocation.y -= 24;
+            newBullet.GlobalPosition = bulletSpawnLocation;
             GetTree().Root.AddChild(newBullet);
         }
         KinematicCollision2D collision = MoveAndCollide(movement);
@@ -134,6 +136,8 @@ public class Player : KinematicBody2D
         Position = pos;
 
         playerSprite.Animation = "default";
+        playerSprite.Stop();
+        playerSprite.Frame = 1;
 
         fuelLevel = maxFuelCapacity * 0.8f;
         int fuelLevelPercentage = (int)(fuelLevel / maxFuelCapacity * 100);
