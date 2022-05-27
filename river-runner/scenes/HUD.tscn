@@ -1,8 +1,64 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://fonts/commodore.tres" type="DynamicFont" id=1]
 [ext_resource path="res://scripts/HUD.cs" type="Script" id=2]
 [ext_resource path="res://assets/sprites/plane.png" type="Texture" id=3]
+
+[sub_resource type="Animation" id=3]
+resource_name = "MessageIn"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Message:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 275 ), Vector2( 0, 310 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Message:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "MessageOut"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Message:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 310 ), Vector2( 0, 275 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Message:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.666667, 1, 0, 1 )
@@ -23,10 +79,14 @@ border_color = Color( 1, 1, 1, 1 )
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 2 )
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/MessageIn = SubResource( 3 )
+anims/MessageOut = SubResource( 4 )
+
 [node name="Message" type="Label" parent="."]
-margin_top = 315.0
+margin_top = 310.0
 margin_right = 480.0
-margin_bottom = 343.0
+margin_bottom = 338.0
 custom_fonts/font = ExtResource( 1 )
 text = "Ready!"
 align = 1

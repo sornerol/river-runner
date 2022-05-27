@@ -12,6 +12,8 @@ public class HUD : CanvasLayer
 
     private ProgressBar fuelGauge;
 
+    private AnimationPlayer animationPlayer;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -19,6 +21,7 @@ public class HUD : CanvasLayer
         fuelGauge = GetNode<ProgressBar>("ColorRect/Fuel");
         livesLabel = GetNode<Label>("ColorRect/Lives");
         messageLabel = GetNode<Label>("Message");
+        animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
     }
 
     public void updateScore(int newScore)
@@ -33,12 +36,20 @@ public class HUD : CanvasLayer
 
     public void showMessage(String message)
     {
-        messageLabel.Text = message;
+        updateMessage(message);
         messageLabel.Visible = true;
+        animationPlayer.Play("MessageIn");
     }
 
-    public void clearMessage()
+    public void updateMessage(String message)
     {
+        messageLabel.Text = message;
+    }
+
+    public async void clearMessage()
+    {
+        animationPlayer.Play("MessageOut");
+        await ToSignal(animationPlayer, "animation_finished");
         messageLabel.Visible = false;
     }
 

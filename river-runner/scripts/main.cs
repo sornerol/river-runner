@@ -124,7 +124,6 @@ public class main : Node2D
         }
         else
         {
-            hud.showMessage("Crash!\nPress <Space>...");
             awaitingPlayerStart = true;
         }
     }
@@ -151,7 +150,7 @@ public class main : Node2D
         }
         else
         {
-            hud.showMessage("Crash!");
+            hud.showMessage("Crash!\nPress <space>...");
         }
         river.stopMoving();
         pauseAfterCrashTimer.Start();
