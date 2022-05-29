@@ -9,7 +9,7 @@ extents = Vector2( 8, 3 )
 [node name="EnemyBase" instance=ExtResource( 1 )]
 scoreValue = 50
 isAquaticVehicle = true
-minHorizontalSpeed = 10.0
+minHorizontalSpeed = 15.0
 maxHorizontalSpeed = 25.0
 
 [node name="CollisionShape2D" parent="." index="1"]
