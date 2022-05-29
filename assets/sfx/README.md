@@ -1,0 +1,1 @@
+This directory contains JSON files needed to generate sound effects at https://sfxr.me/.
