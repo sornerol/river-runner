@@ -2,7 +2,7 @@
     "oldParams": true,
     "wave_type": 3,
     "p_env_attack": 0,
-    "p_env_sustain": 0.25,
+    "p_env_sustain": 0.664,
     "p_env_punch": 0,
     "p_env_decay": 0,
     "p_base_freq": 0.175,
@@ -23,7 +23,7 @@
     "p_lpf_resonance": 0,
     "p_hpf_freq": 0,
     "p_hpf_ramp": 0,
-    "sound_vol": 0.299,
+    "sound_vol": 0.231,
     "sample_rate": 44100,
     "sample_size": 8
   }

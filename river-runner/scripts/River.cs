@@ -19,6 +19,9 @@ public class River : Node
     [Export]
     public float speedSensitivity;
 
+    [Signal]
+    public delegate void speedChanged(float speedRelativeToDefault);
+
     private float currentSpeed;
 
     private RiverTileMap riverTileMap1;
@@ -149,12 +152,14 @@ public class River : Node
     {
         currentSpeed += speedSensitivity * delta;
 		currentSpeed = Mathf.Clamp(currentSpeed, minSpeed, maxSpeed);
+        EmitSignal(nameof(speedChanged), currentSpeed / defaultSpeed);
     }
 
     private void slowDown(float delta)
     {
         currentSpeed -= speedSensitivity * delta;
 		currentSpeed = Mathf.Clamp(currentSpeed, minSpeed, maxSpeed);
+        EmitSignal(nameof(speedChanged), currentSpeed / defaultSpeed);
     }
 
     private void returnToDefaultSpeed(float delta)
@@ -163,11 +168,13 @@ public class River : Node
         {
             currentSpeed -= speedSensitivity * delta;
 			currentSpeed = Mathf.Clamp(currentSpeed, defaultSpeed, maxSpeed);
+            EmitSignal(nameof(speedChanged), currentSpeed / defaultSpeed);
         }
         else if (currentSpeed < defaultSpeed)
         {
             currentSpeed += speedSensitivity * delta;
 			currentSpeed = Mathf.Clamp(currentSpeed, minSpeed, defaultSpeed);
+            EmitSignal(nameof(speedChanged), currentSpeed / defaultSpeed);
         }
     }
 
@@ -180,5 +187,6 @@ public class River : Node
     {
         isMoving = true;
         currentSpeed = defaultSpeed / 2;
+        EmitSignal(nameof(speedChanged), currentSpeed / defaultSpeed);
     }
 }

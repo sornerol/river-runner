@@ -30,6 +30,14 @@ public class Player : KinematicBody2D
 
     private AnimatedSprite playerSprite;
 
+    private AudioStreamPlayer planeSfx;
+
+    private AudioStreamPlayer fuelingSfx;
+
+    private AudioStreamPlayer fireSfx;
+
+    private AudioStreamPlayer explosionSfx;
+
     private float fuelLevel;
 
     private bool playerIsMoving;
@@ -39,6 +47,11 @@ public class Player : KinematicBody2D
     public override void _Ready()
     {
         playerSprite = GetNode<AnimatedSprite>("Player");
+        planeSfx = GetNode<AudioStreamPlayer>("PlaneSfx");
+        fuelingSfx = GetNode<AudioStreamPlayer>("FuelingSfx");
+        fireSfx = GetNode<AudioStreamPlayer>("FireSfx");
+        explosionSfx = GetNode<AudioStreamPlayer>("ExplosionSfx");
+
         GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred("disabled", true);
         initializePlayerForNewTurn();
     }
@@ -72,6 +85,7 @@ public class Player : KinematicBody2D
             bulletSpawnLocation.y -= 24;
             newBullet.GlobalPosition = bulletSpawnLocation;
             GetTree().Root.AddChild(newBullet);
+            fireSfx.Play();
         }
         KinematicCollision2D collision = MoveAndCollide(movement);
         if (collision != null)
@@ -86,6 +100,10 @@ public class Player : KinematicBody2D
         if (playerIsFueling)
         {
             fuelLevel += fuelIncreaseRate * delta;
+            if (fuelLevel >= maxFuelCapacity)
+            {
+                fuelingSfx.Stop();
+            }
         }
         else
         {
@@ -104,12 +122,15 @@ public class Player : KinematicBody2D
     public void startTurn()
     {
         playerIsMoving = true;
+        planeSfx.Play();
         GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred("disabled", false);
     }
 
     public void crashPlane()
     {
         EmitSignal(nameof(planeCrashed));
+        planeSfx.Stop();
+        explosionSfx.Play();
         playerSprite.Animation = "explosion";
         playerSprite.Play();
         playerIsMoving = false;
@@ -120,11 +141,16 @@ public class Player : KinematicBody2D
     public void startFueling()
     {
         playerIsFueling = true;
+        if (fuelLevel < maxFuelCapacity)
+        {
+            fuelingSfx.Play();
+        }
     }
 
     public void stopFueling()
     {
         playerIsFueling = false;
+        fuelingSfx.Stop();
     }
 
     public void initializePlayerForNewTurn()
@@ -142,5 +168,10 @@ public class Player : KinematicBody2D
         fuelLevel = maxFuelCapacity * 0.8f;
         int fuelLevelPercentage = (int)(fuelLevel / maxFuelCapacity * 100);
         EmitSignal(nameof(fuelLevelChanged), fuelLevelPercentage);
+    }
+
+    public void _OnPlaneSpeedChange(float speedRelativeToDefault)
+    {
+        planeSfx.PitchScale = speedRelativeToDefault;
     }
 }

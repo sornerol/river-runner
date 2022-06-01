@@ -8,9 +8,12 @@ public class ShootableBase : Area2D
     [Export]
     public int scoreValue;
 
+    private AudioStreamPlayer explosionSfx;
+
     public override void _Ready()
     {
         base._Ready();
+        explosionSfx = GetNode<AudioStreamPlayer>("ExplosionSfx");
         Connect(nameof(shootableHit), GetNode("/root/Main"), nameof(main._OnShootableHit));
 
     }
@@ -21,6 +24,7 @@ public class ShootableBase : Area2D
         AnimatedSprite explosionAnimation = GetNode<AnimatedSprite>("AnimatedSprite");
         explosionAnimation.Animation = "explosion";
         explosionAnimation.Play();
+        explosionSfx.Play();
         EmitSignal(nameof(shootableHit), scoreValue);
         await ToSignal(explosionAnimation, "animation_finished");
         QueueFree();
