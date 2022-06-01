@@ -1,11 +1,11 @@
 {
     "oldParams": true,
-    "wave_type": 0,
+    "wave_type": 2,
     "p_env_attack": 0.154,
     "p_env_sustain": 0.3744255643423741,
     "p_env_punch": 0,
     "p_env_decay": 0.4367166056519295,
-    "p_base_freq": 0.296,
+    "p_base_freq": 0.232,
     "p_freq_limit": 0,
     "p_freq_ramp": 0.162,
     "p_freq_dramp": 0.056,
@@ -23,7 +23,7 @@
     "p_lpf_resonance": 0,
     "p_hpf_freq": 0,
     "p_hpf_ramp": 0,
-    "sound_vol": 0.393,
+    "sound_vol": 0.401,
     "sample_rate": 44100,
     "sample_size": 8
   }
