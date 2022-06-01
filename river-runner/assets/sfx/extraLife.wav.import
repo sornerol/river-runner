@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/extraLife.wav-a644840fff38219fd4df088f172f4847.sample"
+
+[deps]
+
+source_file="res://assets/sfx/extraLife.wav"
+dest_files=[ "res://.import/extraLife.wav-a644840fff38219fd4df088f172f4847.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=true
+edit/loop=false
+compress/mode=0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scripts/River.cs" type="Script" id=1]
 [ext_resource path="res://scenes/RiverTileMap.tscn" type="PackedScene" id=2]
@@ -11,11 +11,12 @@
 [ext_resource path="res://assets/sfx/fueling.wav" type="AudioStream" id=9]
 [ext_resource path="res://assets/sfx/fire.wav" type="AudioStream" id=10]
 [ext_resource path="res://scenes/Explosion.tscn" type="PackedScene" id=11]
+[ext_resource path="res://assets/sfx/extraLife.wav" type="AudioStream" id=12]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 4 )
 initialLives = 3
-freeLifeScoreInterval = 20000
+freeLifeScoreInterval = 500
 
 [node name="HUD" parent="." instance=ExtResource( 3 )]
 layer = 100
@@ -66,6 +67,9 @@ one_shot = true
 
 [node name="PauseAfterCrashTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="ExtraLifeSfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 12 )
 
 [connection signal="speedChanged" from="River" to="Player" method="_OnPlaneSpeedChange"]
 [connection signal="fuelLevelChanged" from="Player" to="HUD" method="updateFuelLevel"]

@@ -96,9 +96,9 @@ align = 1
 valign = 1
 
 [node name="Instructions" type="Label" parent="."]
-margin_top = 450.0
+margin_top = 474.0
 margin_right = 480.0
-margin_bottom = 633.0
+margin_bottom = 657.0
 rect_pivot_offset = Vector2( 372, 14 )
 custom_fonts/font = ExtResource( 1 )
 text = "-- Controls --

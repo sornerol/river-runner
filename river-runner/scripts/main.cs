@@ -27,6 +27,8 @@ public class main : Node2D
 
     private Player player;
 
+    private AudioStreamPlayer extraLifeSfx;
+
     HUD hud;
 
     public override void _Ready()
@@ -37,6 +39,7 @@ public class main : Node2D
         getReadyTimer = GetNode<Timer>("GetReadyTimer");
         pauseAfterCrashTimer = GetNode<Timer>("PauseAfterCrashTimer");
         player = GetNode<Player>("Player");
+        extraLifeSfx = GetNode<AudioStreamPlayer>("ExtraLifeSfx");
         startAttractMode();
     }
 
@@ -135,10 +138,11 @@ public class main : Node2D
     public void _OnShootableHit(int pointsToAdd)
     {
         score += pointsToAdd;
-        if (score - lastFreeLifeEarnedScore > freeLifeScoreInterval)
+        if (score - lastFreeLifeEarnedScore >= freeLifeScoreInterval)
         {
             livesRemaining++;
             lastFreeLifeEarnedScore += freeLifeScoreInterval;
+            extraLifeSfx.Play();
             hud.updateLives(livesRemaining);
         }
         hud.updateScore(score);
