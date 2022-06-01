@@ -130,6 +130,7 @@ public class Player : KinematicBody2D
     {
         EmitSignal(nameof(planeCrashed));
         planeSfx.Stop();
+        fuelingSfx.Stop();
         explosionSfx.Play();
         playerSprite.Animation = "explosion";
         playerSprite.Play();

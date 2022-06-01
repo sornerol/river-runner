@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://fonts/commodore.tres" type="DynamicFont" id=1]
 [ext_resource path="res://scripts/HUD.cs" type="Script" id=2]
 [ext_resource path="res://assets/sprites/plane.png" type="Texture" id=3]
+[ext_resource path="res://assets/sfx/fuelWarning.wav" type="AudioStream" id=4]
 
 [sub_resource type="Animation" id=3]
 resource_name = "MessageIn"
@@ -78,6 +79,7 @@ border_color = Color( 1, 1, 1, 1 )
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 2 )
+fuelWarningThreshold = 20
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/MessageIn = SubResource( 3 )
@@ -87,8 +89,24 @@ anims/MessageOut = SubResource( 4 )
 margin_top = 310.0
 margin_right = 480.0
 margin_bottom = 338.0
+rect_pivot_offset = Vector2( 372, 14 )
 custom_fonts/font = ExtResource( 1 )
 text = "Ready!"
+align = 1
+valign = 1
+
+[node name="Instructions" type="Label" parent="."]
+margin_top = 450.0
+margin_right = 480.0
+margin_bottom = 633.0
+rect_pivot_offset = Vector2( 372, 14 )
+custom_fonts/font = ExtResource( 1 )
+text = "-- Controls --
+A........Move left
+D.......Move right
+W.........Speed up
+S........Slow down
+Space.........Fire"
 align = 1
 valign = 1
 
@@ -150,11 +168,10 @@ texture = ExtResource( 3 )
 hframes = 3
 frame = 1
 
-[node name="Button" type="Button" parent="."]
-visible = false
-margin_left = 178.0
-margin_top = 347.0
-margin_right = 298.0
-margin_bottom = 407.0
-custom_fonts/font = ExtResource( 1 )
-text = "Play"
+[node name="FuelWarningSfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+
+[node name="FuelWarningTimer" type="Timer" parent="."]
+wait_time = 1.5
+
+[connection signal="timeout" from="FuelWarningTimer" to="." method="_OnFuelWarningTimerTimeout"]

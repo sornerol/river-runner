@@ -65,7 +65,6 @@ wait_time = 2.0
 one_shot = true
 
 [node name="PauseAfterCrashTimer" type="Timer" parent="."]
-wait_time = 3.0
 one_shot = true
 
 [connection signal="speedChanged" from="River" to="Player" method="_OnPlaneSpeedChange"]

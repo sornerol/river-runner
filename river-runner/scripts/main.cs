@@ -62,8 +62,10 @@ public class main : Node2D
         }
     }
 
-    public void startAttractMode() {
-        hud.showMessage("RIVER RUNNER\nPress <space> to start");
+    public async void startAttractMode() {
+        await hud.clearMessage();
+        hud.showMessage("RIVER RUNNER\nby Sornerol\nPress <space>...");
+        hud.showInstructions();
         attractMode = true;
         awaitingPlayerStart = true;
         player.Visible = false;
@@ -78,6 +80,7 @@ public class main : Node2D
         river.setupForNewGame();
         resetScore();
         resetLives();
+        hud.hideInstructions();
         initializeNewTurn();
     }
 
@@ -103,15 +106,16 @@ public class main : Node2D
         hud.updateLives(livesRemaining);
     }
 
-    public void startGetReadyInterval()
+    public async void startGetReadyInterval()
     {
+        await hud.clearMessage();      
         hud.showMessage("Ready!");
         getReadyTimer.Start();
     }
 
-    public void _OnGetReadyTimeout()
+    public async void _OnGetReadyTimeout()
     {
-        hud.clearMessage();
+        await hud.clearMessage();
         river.startMoving();
         player.startTurn();
     }
@@ -144,6 +148,7 @@ public class main : Node2D
     {
         livesRemaining--;
         hud.updateLives(livesRemaining);
+        hud.stopFuelWarning();
         if (livesRemaining < 1)
         {
             hud.showMessage("Game over");
