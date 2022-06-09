@@ -4,6 +4,7 @@
 [ext_resource path="res://scripts/shootables/enemies/EnemyBase.cs" type="Script" id=2]
 
 [node name="EnemyBase" instance=ExtResource( 1 )]
+z_index = 20
 script = ExtResource( 2 )
 
 [connection signal="body_entered" from="." to="." method="_OnBodyEntered"]
